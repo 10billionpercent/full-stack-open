@@ -1,16 +1,26 @@
 import { useState } from 'react'
+import Search from './components/Search'
+import Result from './components/Result'
+import Add from './components/Add'
+
 
 const App = () => {
   const [persons, setPersons] = useState([
-    { name: 'Hange Zoe' , number: '9876543210'}
+    { id: 1, name: 'Hange Zoe' , number: '9876543210'}
   ]) 
+  const [newId, setNewId] = useState(2)
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
+  const [search, setSearch] = useState('')
+  const [found, setFound] = useState([])
   const handleNameChange = (e) => {
         setNewName(e.target.value)
   }
   const handleNumberChange = (e) => {
         setNewNumber(e.target.value)
+  }
+  const handleSearchChange = (e) => {
+    setSearch(e.target.value)
   }
   const addName = (e) => {
         e.preventDefault()
@@ -20,35 +30,31 @@ const App = () => {
       setNewNumber('')
     }
     else {
-    let newPersons = [...persons]
-    newPersons.push({name : newName, number: newNumber})
-    setPersons(newPersons)
-    console.log(newPersons)
+    let newPerson = {id: newId, name : newName, number: newNumber}
+    setPersons([...persons, newPerson])
+    setNewId(newId+1)
     setNewName('')
     setNewNumber('')
   }
   }
 
+  const searchName = (e) => {
+    e.preventDefault()
+    let foundPersons = persons.filter(person => person.name.toLowerCase().includes(search.toLowerCase()))
+    setFound(foundPersons)
+    if (foundPersons.length ===0) {
+      alert(`${search} not found in phonebook`)
+    }
+  }
 
   return (
     <div>
       <h2>Phonebook</h2>
-      <form onSubmit={addName}>
-        <div>
-          name = <input value ={newName} onChange={handleNameChange}/>
-        </div>
-        <div>
-          phone number = <input value ={newNumber} onChange={handleNumberChange}/>
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
-      <h2>Numbers</h2>
-      <div >
-        {persons.map(person => <p key={person.name}>{person.name} {person.number}</p>)}
-        </div>
-    </div>
+      <Search inputHandler={handleSearchChange} searchHandler={searchName} search={search}/>
+      <Result found={found}/>
+      <Add addHandler={addName} newName={newName} nameHandler={handleNameChange}
+      newNumber={newNumber} numberHandler={handleNumberChange}/>
+       </div>  
   )
 }
 
