@@ -28,18 +28,25 @@ const App = () => {
       alert(`${newName} is already added to phonebook`)
       setNewName('')
       setNewNumber('')
+      return
     }
-    else {
+    if (newName === '' || newNumber === '') {
+      alert('enter all details')
+      return
+    }
     let newPerson = {id: newId, name : newName, number: newNumber}
     setPersons([...persons, newPerson])
     setNewId(newId+1)
     setNewName('')
     setNewNumber('')
   }
-  }
 
   const searchName = (e) => {
     e.preventDefault()
+    if (search === '') {
+      alert('enter a name to search')
+      return
+    }
     let foundPersons = persons.filter(person => person.name.toLowerCase().includes(search.toLowerCase()))
     setFound(foundPersons)
     if (foundPersons.length ===0) {
