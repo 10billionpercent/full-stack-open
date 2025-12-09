@@ -29,7 +29,16 @@ const App = () => {
   const addName = (e) => {
         e.preventDefault()
     if (persons.some(person => person.name ===newName)) {
-      alert(`${newName} is already added to phonebook`)
+      if (window.confirm(`Update ${newName} ?`)) {
+        let personToUpdate = persons.find(p => p.name === newName)
+        let updatedPerson = {...personToUpdate, number: newNumber}
+        const id = updatedPerson.id
+        personService
+        .updatePerson(id, updatedPerson)
+        .then(returnedPerson => 
+          setPersons(persons.map(p => p.id === id ? returnedPerson : p))
+        )
+      }
       setNewName('')
       setNewNumber('')
       return
@@ -67,6 +76,7 @@ const deleteNumber = (person) => {
       .then(personService.getAll().then(lol => setPersons(lol)))
     }
 }
+
   return (
     <div>
       <h2>Phonebook</h2>
