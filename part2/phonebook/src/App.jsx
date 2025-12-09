@@ -2,24 +2,20 @@ import { useState, useEffect } from 'react'
 import Search from './components/Search'
 import Result from './components/Result'
 import Add from './components/Add'
-import axios from 'axios'
+import personService from './services/persons'
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
-  const [newId, setNewId] = useState(2)
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [search, setSearch] = useState('')
   const [found, setFound] = useState([])
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        setPersons(response.data)
-      })
-  }, [])
-          console.log(persons.map(person => person.name))
+    personService
+    .getAll()
+    .then(initialPersons => setPersons(initialPersons))
+      }, [])
   const handleNameChange = (e) => {
         setNewName(e.target.value)
   }
@@ -41,13 +37,15 @@ const App = () => {
       alert('enter all details')
       return
     }
-    let newPerson = {id: newId, name : newName, number: newNumber}
-    setPersons([...persons, newPerson])
-    setNewId(newId+1)
+    let newPerson = {name : newName, number: newNumber}
+    personService
+    .addPerson(newPerson)
+    .then(returnedPerson =>{ 
+    setPersons([...persons, returnedPerson])
     setNewName('')
     setNewNumber('')
+    })
   }
-
   const searchName = (e) => {
     e.preventDefault()
     if (search === '') {
