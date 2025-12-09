@@ -1,4 +1,7 @@
 const Result = (props) => {
+    if (props.found.length===0) {
+      return null
+    }
     return (
         <>
         <h2>Search Result</h2>

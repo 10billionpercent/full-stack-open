@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import Search from './components/Search'
 import Result from './components/Result'
 import Add from './components/Add'
+import Persons from './components/Persons'
 import personService from './services/persons'
 
 const App = () => {
@@ -15,7 +16,7 @@ const App = () => {
     personService
     .getAll()
     .then(initialPersons => setPersons(initialPersons))
-      }, [])
+      }, [persons])
   const handleNameChange = (e) => {
         setNewName(e.target.value)
   }
@@ -59,6 +60,13 @@ const App = () => {
     }
   }
 
+const deleteNumber = (person) => {
+    if (window.confirm(`Delete ${person.name} ?`)) {
+      personService
+      .deletePerson(person.id)
+      .then(personService.getAll().then(lol => setPersons(lol)))
+    }
+}
   return (
     <div>
       <h2>Phonebook</h2>
@@ -66,6 +74,7 @@ const App = () => {
       <Result found={found}/>
       <Add addHandler={addName} newName={newName} nameHandler={handleNameChange}
       newNumber={newNumber} numberHandler={handleNumberChange}/>
+      <Persons persons = {persons} deleteHandler = {deleteNumber} />
        </div>  
   )
 }
