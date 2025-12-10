@@ -3,7 +3,9 @@ import Search from './components/Search'
 import Result from './components/Result'
 import Add from './components/Add'
 import Persons from './components/Persons'
+import Notification from './components/Notification'
 import personService from './services/persons'
+
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
@@ -11,12 +13,14 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [search, setSearch] = useState('')
   const [found, setFound] = useState([])
+  const [message, setMessage] = useState(null)
+  const [type, setType] = useState('success')
 
   useEffect(() => {
     personService
     .getAll()
     .then(initialPersons => setPersons(initialPersons))
-      }, [persons])
+      }, [])
   const handleNameChange = (e) => {
         setNewName(e.target.value)
   }
@@ -25,6 +29,14 @@ const App = () => {
   }
   const handleSearchChange = (e) => {
     setSearch(e.target.value)
+  }
+
+  const updateMessage = (newMessage, newType='success') => {
+    setMessage(newMessage)
+    setType(newType)
+      setTimeout(() => {
+        setMessage(null)
+      },5000)
   }
   const addName = (e) => {
         e.preventDefault()
@@ -35,9 +47,14 @@ const App = () => {
         const id = updatedPerson.id
         personService
         .updatePerson(id, updatedPerson)
-        .then(returnedPerson => 
+        .then(returnedPerson => {
           setPersons(persons.map(p => p.id === id ? returnedPerson : p))
+           updateMessage(`Updated ${newName}`)}
         )
+        .catch(error => {
+          updateMessage(`Information of ${newName} has already been removed from server`, 'error')
+          setPersons(persons.filter(p => p.id !==id))
+        })
       }
       setNewName('')
       setNewNumber('')
@@ -52,8 +69,9 @@ const App = () => {
     .addPerson(newPerson)
     .then(returnedPerson =>{ 
     setPersons([...persons, returnedPerson])
+    updateMessage(`Added ${newName}`, 'success')
     setNewName('')
-    setNewNumber('')
+    setNewNumber('')    
     })
   }
   const searchName = (e) => {
@@ -73,13 +91,14 @@ const deleteNumber = (person) => {
     if (window.confirm(`Delete ${person.name} ?`)) {
       personService
       .deletePerson(person.id)
-      .then(personService.getAll().then(lol => setPersons(lol)))
+      .then(setPersons(persons.filter( p => p.id !== person.id)))
     }
 }
 
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message} type = {type} />
       <Search inputHandler={handleSearchChange} searchHandler={searchName} search={search}/>
       <Result found={found}/>
       <Add addHandler={addName} newName={newName} nameHandler={handleNameChange}
