@@ -1,0 +1,10 @@
+html, button, input {
+    background-color: #01141b;
+    color: white;
+}
+
+div {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
