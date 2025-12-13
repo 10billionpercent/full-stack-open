@@ -1,12 +1,15 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
+import Content from './components/Content'
 import './App.css'
 
 function App() {
   const [country, setCountry] = useState('')
   const [data, setData] = useState([])
-  const [content, setContent] = useState(null)
-  const [countryData, setCountryData] = useState([])
+  const [query, setQuery] = useState(null)
+  const [calledApi, setCalledApi] = useState(false)
+  const [content, setContent] = useState([])
+  const [type, setType] = useState('')
 
   useEffect(() => {
     axios
@@ -14,64 +17,43 @@ function App() {
         .then(response =>
           setData(response.data)
         )
-  })
+  }, [])
   const handleCountryChange = (e) => {
     setCountry(e.target.value)
   }
 
+
+  const getCountryData = (query) => { if (query) {
+    axios
+          .get(`https://studies.cs.helsinki.fi/restcountries/api/name/${query}`)
+          .then(response => {const d = response.data
+          setContent(d)
+          setType('object')
+          })
+          .catch(() =>console.log('meow'))
+  }}
+
+useEffect(() => { getCountryData(query)} , [query])
+
   const submitCountry = (e) => {
         e.preventDefault()
         const names = data.map(country => country.name.common)
-        const countries = names.filter(c => c.toLowerCase().includes(country))
-        if (countries.length > 10) {
-          setContent("Too many matches, specify another filter")
-          setTimeout(() => {
-            setContent('')
-          }, 5000)
+        const countries = names.filter(c => c.toLowerCase().includes(country.toLowerCase()))
+        if (countries.length === 1) {
+          setQuery(countries[0].toLowerCase())
         }
         else if (countries.length > 1 && countries.length < 10) {
-          if (countries.some(c => c.toLowerCase() === country)) {
-           axios
-          .get(`https://studies.cs.helsinki.fi/restcountries/api/name/${country}`)
-          .then(response => setCountryData(response.data))
-          console.log(countryData)
-          setContent(<div>
-            <h1>{countryData.name.common}</h1>
-            <p> Capital {countryData.capital} </p>
-            <p> Area {countryData.area} </p>
-            <p> Languages </p>
-            {Object.values(countryData.languages).map((l, i) => <li key = {i}> {l} </li>)}
-            <img src = {countryData.flags.png}/>
-          </div>)
-        }
-        else {
-           setContent(countries.map((c,i) => <p key = {i}> {c} </p>)) }
-        }
-        else if (countries.length === 1) {
-           axios
-          .get(`https://studies.cs.helsinki.fi/restcountries/api/name/${country}`)
-          .then(response => setCountryData(response.data))
-          console.log(countryData)
-        }
-
-        else {
-          setContent('no matches found')
-          setTimeout(() => {
-            setContent('')
-          }, 5000)
-        }
-        
-  }
-
+         setQuery(countries.find(c => c.toLowerCase() === country.toLowerCase()))}
+        setContent(countries)
+        setType('array') }
+            
   return (
     <div>
     <input value={country} onChange={handleCountryChange} placeholder='enter country name'/> 
     <button onClick={submitCountry}> meow </button>
-    <div> 
-      {content}
-      </div>
+    <Content contentData={content} type={type} searchHandler={getCountryData}/>
     </div>
   )
 }
-
 export default App
+
