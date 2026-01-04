@@ -3,22 +3,32 @@
     {
       "name": "Hange Zoë",
       "number": "040-123456",
-      "id": "1"
+      "id": 1
     },
     {
       "name": "Senku Ishigami",
       "number": "12345667",
-      "id": "2"
+      "id": 2
     },
     {
       "name": "Gen Asagiri",
       "number": "12354",
-      "id": "3"
+      "id": 3
     },
     {
       "name": "Edward Elric",
       "number": "39-23-6423122",
-      "id": "4"
+      "id": 4
+    },
+    {
+      "id": 33,
+      "name": "meowwww",
+      "number": "238575"
+    },
+    {
+      "id": 65,
+      "name": "mowioer",
+      "number": "1243214"
     }
   ]
 }
