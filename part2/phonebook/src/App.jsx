@@ -73,6 +73,9 @@ const App = () => {
     setNewName('')
     setNewNumber('')    
     })
+    .catch(err => {
+      updateMessage(err.response.data.err)
+    })
   }
   const searchName = (e) => {
     e.preventDefault()
