@@ -51,9 +51,8 @@ const App = () => {
           setPersons(persons.map(p => p.id === id ? returnedPerson : p))
            updateMessage(`Updated ${newName}`)}
         )
-        .catch(error => {
-          updateMessage(`Information of ${newName} has already been removed from server`, 'error')
-          setPersons(persons.filter(p => p.id !==id))
+        .catch(err => {
+          updateMessage(err.response.data.error, 'error')
         })
       }
       setNewName('')
@@ -74,7 +73,7 @@ const App = () => {
     setNewNumber('')    
     })
     .catch(err => {
-      updateMessage(err.response.data.err)
+      updateMessage(err.response.data.error, 'error')
     })
   }
   const searchName = (e) => {
