@@ -12,7 +12,7 @@ describe('favorite blog', () => {
     _id: "5a422a851b54a676234d17f7",
     title: "React patterns",
     author: "Hange Zoë",
-    url: "https://hangezoe.com/",
+    url: "https://titansrwonderful.com/",
     likes: 7,
     __v: 0
   }]
