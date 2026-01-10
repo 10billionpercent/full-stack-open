@@ -68,6 +68,56 @@ test('a valid blog can be added', async () => {
     
     assert(titles.includes('I am a panther'))
 })
+
+test('a blog with no likes gets 0', async () => {
+    const newBlog = {"title":"Boring Title",
+    "author":"NPC",
+    "url":"https://boring.com"}
+
+    await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type',/application\/json/)
+
+    const res = await api.get('/api/blogs')
+
+    const titles = res.body.map(r => r.title)
+
+    assert.strictEqual(res.body.length, initialBlogs.length + 1)
+    
+    assert(titles.includes('Boring Title'))
+})
+
+test('a blog with no title is not added', async () => {
+    const newBlog = {
+    "author":"NPC",
+    "url":"https://boring.com"}
+
+    await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
+
+    const res = await api.get('/api/blogs')
+
+    assert.strictEqual(res.body.length, initialBlogs.length)
+})
+
+test('a blog with no url is not added', async () => {
+    const newBlog = {"title": "So Boring",
+    "author":"NPC"}
+
+    await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
+
+    const res = await api.get('/api/blogs')
+
+    assert.strictEqual(res.body.length, initialBlogs.length)
+})
+
 after(async () => {
     await mongoose.connection.close()
 })
