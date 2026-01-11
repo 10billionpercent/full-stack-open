@@ -118,6 +118,49 @@ test('a blog with no url is not added', async () => {
     assert.strictEqual(res.body.length, initialBlogs.length)
 })
 
+test('a blog with valid id is successfully deleted', async () => {
+    const res = await api.get('/api/blogs')
+
+    const idToDelete = res.body[0].id
+
+    await api
+    .delete(`/api/blogs/${idToDelete}`)
+    .expect(204)
+    
+    const afterDeleting = await api.get('/api/blogs')
+
+    const ids = afterDeleting.body.map(r => r.id)
+
+    assert(!ids.includes(idToDelete))
+
+    assert.strictEqual(afterDeleting.body.length, res.body.length - 1)
+})
+
+test('existing blog likes is updated correctly', async () => {
+    const newBlog = {"title": "Cat wars",
+    "author": "Orange Cat",
+    "url": "https://meow.com",
+    "likes":2000}
+
+    const res = await api.get('/api/blogs')
+
+    const idToUpdate = res.body.find(b => b.title === newBlog.title).id
+
+    await api
+    .put(`/api/blogs/${idToUpdate}`)
+    .send(newBlog)
+    .expect(200)
+    .expect('Content-Type',/application\/json/)
+
+    const updated = await api.get('/api/blogs')
+
+    const updatedBlog = updated.body.find(b => b.id === idToUpdate)
+
+    assert.strictEqual(updated.body.length, initialBlogs.length)
+    
+    assert.strictEqual(updatedBlog.likes, newBlog.likes)
+})
+
 after(async () => {
     await mongoose.connection.close()
 })

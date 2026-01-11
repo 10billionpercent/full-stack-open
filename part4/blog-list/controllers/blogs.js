@@ -6,17 +6,15 @@ blogsRouter.get('/', async (req, res) => {
   res.json(blogs)
   })
 
-blogsRouter.get('/:id', (req, res, next) => {
+blogsRouter.get('/:id', async (req, res, next) => {
   const id = req.params.id
-  Blog.findById(id).then(blog => {
-    if (blog) {
+  const blog = await Blog.findById(id)
+  if (blog) {
       res.json(blog)
     }
     else {
       res.status(404).end()
     }
-  })
-    .catch(err => next(err))
 })
 
 blogsRouter.post('/', async (req, res, next) => {
@@ -24,7 +22,7 @@ blogsRouter.post('/', async (req, res, next) => {
 
   if (!body) {
     return res.status(400).json({
-      error: 'title, author, url and likes missing'
+      error: 'title, author, url missing'
     })
   }
 
@@ -54,5 +52,28 @@ blogsRouter.post('/', async (req, res, next) => {
   const savedBlog = await blog.save()
   res.status(201).json(savedBlog)
 })
+
+blogsRouter.delete('/:id', async (req, res, next) => {
+  const id = req.params.id
+  console.log(id)
+  await Blog.findByIdAndDelete(id)
+  res.status(204).end()
+})
+
+blogsRouter.put('/:id', async (req, res, next) => {
+  const { author, title, url, likes } = req.body
+  const blog = await Blog.findById(req.params.id)
+    if (!blog) {
+      return res.status(404).end()
+    }
+
+    blog.author = author
+    blog.title = title
+    blog.url = url
+    blog.likes = likes
+
+    const savedBlog = await blog.save()
+      res.json(savedBlog)
+    })
 
 module.exports = blogsRouter
