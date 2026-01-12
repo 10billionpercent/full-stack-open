@@ -1,19 +1,20 @@
-const { test, after, beforeEach } = require('node:test')
+const { test, after, beforeEach, describe } = require('node:test')
 const assert = require('node:assert')
 const mongoose = require('mongoose')
 const supertest = require('supertest')
+const helper = require('./test_helper')
 const Blog = require('../models/blog')
 const app = require('../app')
 
 const api = supertest(app)
 
+describe('when some blogs are initially saved', () => {
 beforeEach(async () => {
 await Blog.deleteMany({}) 
     await Promise.all(
-        initialBlogs.map(blog => new Blog(blog).save())
+        helper.initialBlogs.map(blog => new Blog(blog).save())
     )
     })
-
 
 test('blogs are returned as JSON', async () => {
     await api
@@ -23,16 +24,17 @@ test('blogs are returned as JSON', async () => {
 })
 
 test('all blogs are returned', async () => {
-    res = await api.get('/api/blogs')
-    assert.strictEqual(res.body.length, 3)
+    const blogs = await helper.blogsInDb()
+    assert.strictEqual(blogs.length, 3)
 })
 
 test('identifier is named id', async () => {
-    res = await api.get('/api/blogs')
-    assert(res.body[0].id)
-    assert.strictEqual(res.body[0]._id, undefined)
+    const blogs = await helper.blogsInDb()
+    assert(blogs[0].id)
+    assert.strictEqual(blogs[0]._id, undefined)
 })
 
+describe('addition of a new blog', () => {
 test('a valid blog can be added', async () => {
     const newBlog = {"title":"I am a panther",
     "author":"Black Cat",
@@ -45,11 +47,11 @@ test('a valid blog can be added', async () => {
     .expect(201)
     .expect('Content-Type',/application\/json/)
 
-    const res = await api.get('/api/blogs')
+    const blogs = await helper.blogsInDb()
 
-    const titles = res.body.map(r => r.title)
+    const titles = blogs.map(r => r.title)
 
-    assert.strictEqual(res.body.length, initialBlogs.length + 1)
+    assert.strictEqual(blogs.length, helper.initialBlogs.length + 1)
     
     assert(titles.includes('I am a panther'))
 })
@@ -65,11 +67,11 @@ test('a blog with no likes gets 0', async () => {
     .expect(201)
     .expect('Content-Type',/application\/json/)
 
-    const res = await api.get('/api/blogs')
+    const blogs = await helper.blogsInDb()
 
-    const titles = res.body.map(r => r.title)
+    const titles = blogs.map(r => r.title)
 
-    assert.strictEqual(res.body.length, initialBlogs.length + 1)
+    assert.strictEqual(blogs.length, helper.initialBlogs.length + 1)
     
     assert(titles.includes('Boring Title'))
 })
@@ -84,9 +86,9 @@ test('a blog with no title is not added', async () => {
     .send(newBlog)
     .expect(400)
 
-    const res = await api.get('/api/blogs')
+    const blogs = await helper.blogsInDb()
 
-    assert.strictEqual(res.body.length, initialBlogs.length)
+    assert.strictEqual(blogs.length, helper.initialBlogs.length)
 })
 
 test('a blog with no url is not added', async () => {
@@ -98,38 +100,42 @@ test('a blog with no url is not added', async () => {
     .send(newBlog)
     .expect(400)
 
-    const res = await api.get('/api/blogs')
+    const blogs = await helper.blogsInDb()
 
-    assert.strictEqual(res.body.length, initialBlogs.length)
+    assert.strictEqual(blogs.length, helper.initialBlogs.length)
+})
 })
 
-test('a blog with valid id is successfully deleted', async () => {
-    const res = await api.get('/api/blogs')
+describe('deletion of a blog', () => {
+    test('a blog with valid id is successfully deleted', async () => {
+    const blogs = await helper.blogsInDb()
 
-    const idToDelete = res.body[0].id
+    const idToDelete = blogs[0].id
 
     await api
     .delete(`/api/blogs/${idToDelete}`)
     .expect(204)
     
-    const afterDeleting = await api.get('/api/blogs')
+    const afterDeleting = await helper.blogsInDb()
 
-    const ids = afterDeleting.body.map(r => r.id)
+    const ids = afterDeleting.map(r => r.id)
 
     assert(!ids.includes(idToDelete))
 
-    assert.strictEqual(afterDeleting.body.length, res.body.length - 1)
+    assert.strictEqual(afterDeleting.length, blogs.length - 1)
+})
 })
 
-test('existing blog likes is updated correctly', async () => {
+describe('updation of a blog', () => {
+    test('existing blog likes is updated correctly', async () => {
     const newBlog = {"title": "Cat wars",
     "author": "Orange Cat",
     "url": "https://meow.com",
     "likes":2000}
 
-    const res = await api.get('/api/blogs')
+    const blogs = await helper.blogsInDb()
 
-    const idToUpdate = res.body.find(b => b.title === newBlog.title).id
+    const idToUpdate = blogs.find(b => b.title === newBlog.title).id
 
     await api
     .put(`/api/blogs/${idToUpdate}`)
@@ -137,13 +143,15 @@ test('existing blog likes is updated correctly', async () => {
     .expect(200)
     .expect('Content-Type',/application\/json/)
 
-    const updated = await api.get('/api/blogs')
+    const updated = await helper.blogsInDb()
 
-    const updatedBlog = updated.body.find(b => b.id === idToUpdate)
+    const updatedBlog = updated.find(b => b.id === idToUpdate)
 
-    assert.strictEqual(updated.body.length, initialBlogs.length)
+    assert.strictEqual(updated.length, helper.initialBlogs.length)
     
     assert.strictEqual(updatedBlog.likes, newBlog.likes)
+})
+})
 })
 
 after(async () => {
