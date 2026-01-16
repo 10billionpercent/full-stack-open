@@ -13,17 +13,17 @@ await User.deleteMany({})
 
 const passwordHash = await bcrypt.hash('meow', 10)
 const user = new User({ username: 'root', 
-    passwordHash
-})
+    passwordHash })
 
 await user.save()
     })
 
 describe('addition of a new user', () => {
 test('a valid user can be added', async () => {
-    const newUser = {"username":"I am a panther",
+    const usersAtStart = await helper.usersInDb()
+    const newUser = { "username":"panther",
     "name":"Black Cat",
-    "password":"https://meowmeow.com"}
+    "password":"panther123" }
 
     await api
     .post('/api/users')
@@ -31,38 +31,57 @@ test('a valid user can be added', async () => {
     .expect(201)
     .expect('Content-Type',/application\/json/)
 
-    const users = await helper.usersInDb()
-
-    const usernames = users.map(r => r.username)
-
-    assert.strictEqual(users.length, helper.initialusers.length + 1)
+    const usersAtEnd = await helper.usersInDb()
+    assert.strictEqual(usersAtEnd.length, usersAtStart.length + 1)
     
+    const usernames = usersAtEnd.map(r => r.username)
     assert(usernames.includes('I am a panther'))
 })
 
 test('a user with no username is not added', async () => {
-    const newUser = { "password":"https://boring.com" }
+    const usersAtStart = await helper.usersInDb()
+    const newUser = { "password": "invalid123" }
 
     await api
     .post('/api/users')
     .send(newUser)
     .expect(400)
 
-    const users = await helper.usersInDb()
+    const usersAtEnd = await helper.usersInDb()
 
-    assert.strictEqual(users.length, helper.initialusers.length)
+    assert.strictEqual(usersAtEnd.length, usersAtStart.length)
 })
 
 test('a user with no password is not added', async () => {
-    const newUser = { "username": "So Boring" }
+    const usersAtStart = await helper.usersInDb()
+    const newUser = { "username": "Invalid" }
 
     await api
     .post('/api/users')
     .send(newUser)
     .expect(400)
 
-    const users = await helper.usersInDb()
+    const usersAtEnd = await helper.usersInDb()
 
-    assert.strictEqual(users.length, helper.initialusers.length)
+    assert.strictEqual(usersAtEnd.length, usersAtStart.length)
+})
+
+test('a user with the same username is not added again', async () => {
+    const usersAtStart = await helper.usersInDb()
+    const newUser = { "username":"panther",
+    "name":"Orange Cat",
+    "password":"panther123329587" } 
+
+    const res = await api
+    .post('/api/users')
+    .send(newUser)
+    .expect(400)
+    .expect('Content-Type',/application\/json/)
+
+    const usersAtEnd = await helper.usersInDb()
+
+    assert(res.body.error.includes('expected `username` to be unique'))
+
+    assert.strictEqual(usersAtEnd.length, usersAtStart.length)
 })
 })
