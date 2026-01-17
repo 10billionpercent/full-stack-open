@@ -5,6 +5,7 @@ const supertest = require('supertest')
 const helper = require('./test_helper')
 const User = require('../models/user')
 const app = require('../app')
+const bcrypt = require('bcrypt')
 
 const api = supertest(app)
 
@@ -35,7 +36,7 @@ test('a valid user can be added', async () => {
     assert.strictEqual(usersAtEnd.length, usersAtStart.length + 1)
     
     const usernames = usersAtEnd.map(r => r.username)
-    assert(usernames.includes('I am a panther'))
+    assert(usernames.includes('panther'))
 })
 
 test('a user with no username is not added', async () => {
@@ -68,7 +69,7 @@ test('a user with no password is not added', async () => {
 
 test('a user with the same username is not added again', async () => {
     const usersAtStart = await helper.usersInDb()
-    const newUser = { "username":"panther",
+    const newUser = { "username":"root",
     "name":"Orange Cat",
     "password":"panther123329587" } 
 
@@ -81,7 +82,12 @@ test('a user with the same username is not added again', async () => {
     const usersAtEnd = await helper.usersInDb()
 
     assert(res.body.error.includes('expected `username` to be unique'))
+    console.log(res)
 
     assert.strictEqual(usersAtEnd.length, usersAtStart.length)
 })
+})
+
+after(async () => {
+    await mongoose.connection.close()
 })
