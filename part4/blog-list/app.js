@@ -8,8 +8,6 @@ const usersRouter = require('./controllers/users')
 
 const app = express()
 
-logger.info('MONGODB_URI ', config.MONGODB_URI)
-
 mongoose.connect(config.MONGODB_URI, { family: 4 })
   .then(_res => {
     logger.info('connected to MongoDB')
