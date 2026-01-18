@@ -24,11 +24,6 @@ blogsRouter.get('/:id', async (req, res, next) => {
 
 blogsRouter.post('/', tokenExtractor, userExtractor, async (req, res, next) => {
   const body = req.body
-
-  if (!req.token) {
-      return res.status(401).json({ error: 'token missing' })
-  }
-
   const user = req.user
 
   if (!user) {
@@ -75,7 +70,6 @@ blogsRouter.post('/', tokenExtractor, userExtractor, async (req, res, next) => {
 
 blogsRouter.delete('/:id', tokenExtractor, userExtractor, async (req, res, next) => {
   const id = req.params.id
-
   const blogToDelete = await Blog.findById(id)
   const user = req.user
 
