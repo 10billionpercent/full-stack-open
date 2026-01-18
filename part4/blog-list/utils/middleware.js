@@ -10,6 +10,10 @@ const requestLogger = morgan(':method :url :status :res[content-length] - :respo
 
 const tokenExtractor = (req, res, next) => {
   const auth = req.get('authorization')
+  
+  if (!auth) {
+    return res.status(401).json({ error: 'token missing' })
+  }
   if (auth && auth.startsWith('Bearer ')) {
     req.token = auth.replace('Bearer ', '')
   }
