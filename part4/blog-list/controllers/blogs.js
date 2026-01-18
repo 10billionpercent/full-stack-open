@@ -26,6 +26,10 @@ blogsRouter.post('/', tokenExtractor, userExtractor, async (req, res, next) => {
   const body = req.body
   const user = req.user
 
+  if (!req.token) {
+    return res.status(401).json({ error: 'token missing' })
+  }
+  
   if (!user) {
      res.status(400).json({ error: 'User Id missing or invalid' })
   }
@@ -75,7 +79,7 @@ blogsRouter.delete('/:id', tokenExtractor, userExtractor, async (req, res, next)
 
   if (blogToDelete.user.toString() === user._id.toString()) {
     await Blog.findByIdAndDelete(id)
-      res.status(204).end()
+    return res.status(204).end()
   }
   else {
     return res.status(401).json({ error: 'invalid token' })

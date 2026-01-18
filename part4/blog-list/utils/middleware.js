@@ -14,7 +14,7 @@ const tokenExtractor = (req, res, next) => {
     req.token = auth.replace('Bearer ', '')
   }
   else {
-     return res.status(401).json({ error: 'token missing' })
+     req.token = null
   }
   next()
 }

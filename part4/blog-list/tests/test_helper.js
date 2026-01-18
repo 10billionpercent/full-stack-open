@@ -5,15 +5,18 @@ const initialBlogs = [
     {"title":"React patterns",
     "author":"Hange Zoë",
     "url":"https://titansrwonderful.com/",
-    "likes":7},
+    "likes":7,
+    "user": "696cd42b6352e925f3531921"},
     {"title":"Type wars",
     "author":"Orange Cat",
     "url":"https://meow.com",
-    "likes":2},
+    "likes":2,
+    "user": "696cd42b6352e925f3531921"},
     {"title":"Cat wars",
     "author":"Orange Cat",
     "url":"https://meow.com",
-    "likes":20}
+    "likes":20,
+    "user": "696cd42b6352e925f3531921"}
 ]
 
 const blogsInDb = async () => {
