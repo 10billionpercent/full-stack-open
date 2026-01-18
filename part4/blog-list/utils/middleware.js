@@ -6,6 +6,17 @@ morgan.token('body',function (req,_res) {
 })
 const requestLogger = morgan(':method :url :status :res[content-length] - :response-time ms :body')
 
+const tokenExtractor = (req, res, next) => {
+  const auth = req.get('authorization')
+  if (auth && auth.startsWith('Bearer ')) {
+    req.token = auth.replace('Bearer ', '')
+  }
+  else {
+    req.token = null
+  }
+  next()
+}
+
 const unknownEndpoint = (req, res) => {
   res.status(404).send({ error: 'unknown endpoint' })
 }
@@ -32,4 +43,4 @@ const unknownErrorHandler = (err, req, res, _next) => {
   return res.status(500).send({ error: 'internal server error' })
 }
 
-module.exports = { requestLogger, unknownEndpoint, errorHandler, unknownErrorHandler }
+module.exports = { requestLogger, tokenExtractor, unknownEndpoint, errorHandler, unknownErrorHandler }
