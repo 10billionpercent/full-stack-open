@@ -11,6 +11,14 @@ blogsRouter.get('/', async (req, res) => {
   res.json(blogs)
   })
 
+blogsRouter.get('/my', tokenExtractor, userExtractor, async (req, res) => {
+const user = req.user
+console.log('token sent', req.token)
+
+const blogs = await Blog.find({ user: user._id })
+  res.json(blogs)
+})
+
 blogsRouter.get('/:id', async (req, res, next) => {
   const id = req.params.id
   const blog = await Blog.findById(id)
@@ -21,6 +29,7 @@ blogsRouter.get('/:id', async (req, res, next) => {
       res.status(404).end()
     }
 })
+
 
 blogsRouter.post('/', tokenExtractor, userExtractor, async (req, res, next) => {
   const body = req.body
