@@ -7,23 +7,38 @@ import blogService from './services/blogs'
 
 
 const App = () => {
-  const [blogs, setBlogs] = useState([]) 
+  const [blogs, setBlogs] = useState(() => {
+    const currentBlogs = window.localStorage.getItem('blogs')
+    return currentBlogs ? JSON.parse(currentBlogs) : []
+  }) 
   const [message, setMessage] = useState(null)
   const [type, setType] = useState('success')
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [user, setUser] = useState(null)
+  const [user, setUser] = useState(() => {
+    const loggedInUser = window.localStorage.getItem('loggedInUser')
+    return loggedInUser ? JSON.parse(loggedInUser) : null
+  })
+
+  useEffect(() => {
+     if (user) {
+        blogService.setToken(user.token)
+     }
+  }, [user])
 
   useEffect(() => {
     async function fetchBlogs() {
     if (user) {
     const blogs = await blogService.getBlogs()
     setBlogs(blogs)
-    console.log('fetched', blogs)
+    window.localStorage.setItem(
+        'blogs', JSON.stringify(blogs)
+      )
     }
     }
     fetchBlogs()
       }, [user])
+
   const handleUsernameChange = (e) => {
         setUsername(e.target.value)
   }
@@ -36,21 +51,29 @@ const App = () => {
     setType(newType)
       setTimeout(() => {
         setMessage(null)
-      },5000)
+      },2000)
   }
 
   const loginHandler = async (e) => {
     e.preventDefault()
     try {
-      const user = await loginService.login({ username, password})
+      const user = await loginService.login({ username, password })
+      window.localStorage.setItem(
+        'loggedInUser', JSON.stringify(user)
+      )
+
       setUser(user)
       setUsername('')
       setPassword('')
       updateMessage('login succesful')
-      blogService.setToken(user.token)
     } catch {
       updateMessage('wrong credentials', 'error')
     }
+  }
+
+  const logoutHandler = () => {
+    window.localStorage.clear()
+    setUser(null)
   }
 /*const updateMessage = (newMessage, newType='success') => {
     setMessage(newMessage)
@@ -100,11 +123,11 @@ const App = () => {
 
   return (
     <div>
-      <h2>Bloglist</h2>
+      <h1>Bloglist</h1>
       <Notification message={message} type = {type} />
       {!user && <Login loginHandler={loginHandler} username={username} usernameHandler={handleUsernameChange}
       password={password} passwordHandler={handlePasswordChange}/>}
-      {user && <Blogs blogs ={blogs} name={user.name}/>}
+      {user && <Blogs blogs ={blogs} name={user.name} logoutHandler = {logoutHandler} />}
        </div>  
   )
 }

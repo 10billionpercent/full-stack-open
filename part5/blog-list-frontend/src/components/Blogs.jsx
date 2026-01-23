@@ -1,8 +1,7 @@
 const Blogs = (props) => {
-    console.log(props.blogs)
     return (
         <>
-        <h2>{props.name} logged in </h2>
+        <h2>{props.name} logged in <button onClick={() => props.logoutHandler()}> logout </button> </h2>
         <h2>Blogs</h2>
       <div>
         {props.blogs.map(blog => <p key={blog.id}>{blog.title} </p>)}
