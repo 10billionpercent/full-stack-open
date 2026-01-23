@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import Login from './components/Login'
+import Add from './components/Add'
 import Blogs from './components/Blogs'
 import Notification from './components/Notification'
 import loginService from './services/login'
@@ -15,6 +16,10 @@ const App = () => {
   const [type, setType] = useState('success')
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const [title, setTitle] = useState('')
+  const [author, setAuthor] = useState('')
+  const [url, setUrl] = useState('')
+  const [likes, setLikes] = useState('')
   const [user, setUser] = useState(() => {
     const loggedInUser = window.localStorage.getItem('loggedInUser')
     return loggedInUser ? JSON.parse(loggedInUser) : null
@@ -45,13 +50,25 @@ const App = () => {
   const handlePasswordChange = (e) => {
         setPassword(e.target.value)
   }
+  const handleTitleChange = (e) => {
+        setTitle(e.target.value)
+  }
+  const handleAuthorChange = (e) => {
+        setAuthor(e.target.value)
+  }
+  const handleUrlChange = (e) => {
+        setUrl(e.target.value)
+  }
+  const handleLikesChange = (e) => {
+        setLikes(e.target.value)
+  }
 
   const updateMessage = (newMessage, newType='success') => {
     setMessage(newMessage)
     setType(newType)
       setTimeout(() => {
         setMessage(null)
-      },2000)
+      }, 5000)
   }
 
   const loginHandler = async (e) => {
@@ -65,9 +82,9 @@ const App = () => {
       setUser(user)
       setUsername('')
       setPassword('')
-      updateMessage('login succesful')
+      updateMessage('login successful')
     } catch {
-      updateMessage('wrong credentials', 'error')
+      updateMessage('wrong username or password', 'error')
     }
   }
 
@@ -75,51 +92,27 @@ const App = () => {
     window.localStorage.clear()
     setUser(null)
   }
-/*const updateMessage = (newMessage, newType='success') => {
-    setMessage(newMessage)
-    setType(newType)
-      setTimeout(() => {
-        setMessage(null)
-      },5000)
-  }
-  const addName = (e) => {
+
+  const addBlog = async (e) => {
         e.preventDefault()
-    if (blogs.some(blog => blog.name ===newName)) {
-      if (window.confirm(`Update ${newName} ?`)) {
-        let blogToUpdate = blogs.find(p => p.name === newName)
-        let updatedblog = {...blogToUpdate, number: newNumber}
-        const id = updatedblog.id
-        blogservice
-        .updateblog(id, updatedblog)
-        .then(returnedblog => {
-          setblogs(blogs.map(p => p.id === id ? returnedblog : p))
-           updateMessage(`Updated ${newName}`)}
-        )
-        .catch(err => {
-          updateMessage(err.response.data.error, 'error')
-        })
-      }
-      setNewName('')
-      setNewNumber('')
-      return
-    }
-    if (newName === '' || newNumber === '') {
+    if (title === '' || author === '' || url === '') {
       alert('enter all details')
       return
     }
-    let newblog = {name : newName, number: newNumber}
-    blogservice
-    .addblog(newblog)
-    .then(returnedblog =>{ 
-    setblogs([...blogs, returnedblog])
-    updateMessage(`Added ${newName}`, 'success')
-    setNewName('')
-    setNewNumber('')    
-    })
-    .catch(err => {
+    let newBlog = {title: title, author: author, url: url, likes: likes}
+    try {
+     const addedBlog = await blogService.addBlog(newBlog, user.token)
+    setBlogs([...blogs, addedBlog])
+    updateMessage(`Added ${title} by ${author}`, 'success')
+    setTitle('')
+    setAuthor('')
+    setUrl('') 
+    setLikes('')  
+    } 
+    catch (err) {
       updateMessage(err.response.data.error, 'error')
-    })
-  }*/
+    }
+  }
 
   return (
     <div>
@@ -128,6 +121,11 @@ const App = () => {
       {!user && <Login loginHandler={loginHandler} username={username} usernameHandler={handleUsernameChange}
       password={password} passwordHandler={handlePasswordChange}/>}
       {user && <Blogs blogs ={blogs} name={user.name} logoutHandler = {logoutHandler} />}
+      {user && <Add title={title} titleHandler={handleTitleChange}
+      author={author} authorHandler={handleAuthorChange} 
+      url={url} urlHandler={handleUrlChange}
+      likes={likes} likesHandler={handleLikesChange}
+      addHandler={addBlog} />}
        </div>  
   )
 }
