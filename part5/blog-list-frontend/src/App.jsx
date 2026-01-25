@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import Toggler from './components/Toggler'
 import Login from './components/Login'
-import Add from './components/Add'
+import AddBlog from './components/AddBlog'
 import Blogs from './components/Blogs'
 import Notification from './components/Notification'
 import loginService from './services/login'
@@ -17,10 +17,6 @@ const App = () => {
   const [type, setType] = useState('success')
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
-  const [likes, setLikes] = useState('')
   const [user, setUser] = useState(() => {
     const loggedInUser = window.localStorage.getItem('loggedInUser')
     return loggedInUser ? JSON.parse(loggedInUser) : null
@@ -50,18 +46,6 @@ const App = () => {
   }
   const handlePasswordChange = (e) => {
         setPassword(e.target.value)
-  }
-  const handleTitleChange = (e) => {
-        setTitle(e.target.value)
-  }
-  const handleAuthorChange = (e) => {
-        setAuthor(e.target.value)
-  }
-  const handleUrlChange = (e) => {
-        setUrl(e.target.value)
-  }
-  const handleLikesChange = (e) => {
-        setLikes(e.target.value)
   }
 
   const updateMessage = (newMessage, newType='success') => {
@@ -94,21 +78,11 @@ const App = () => {
     setUser(null)
   }
 
-  const addBlog = async (e) => {
-        e.preventDefault()
-    if (title === '' || author === '' || url === '') {
-      alert('enter all details')
-      return
-    }
-    let newBlog = {title: title, author: author, url: url, likes: likes}
+  const addBlog = async (newBlog) => {
     try {
      const addedBlog = await blogService.addBlog(newBlog, user.token)
     setBlogs([...blogs, addedBlog])
-    updateMessage(`Added ${title} by ${author}`, 'success')
-    setTitle('')
-    setAuthor('')
-    setUrl('') 
-    setLikes('')  
+    updateMessage(`Added ${addedBlog.title} by ${addedBlog.author}`, 'success')
     } 
     catch (err) {
       updateMessage(err.response.data.error, 'error')
@@ -124,15 +98,7 @@ const App = () => {
 )
   const blogForm = () => (
     <Toggler buttonLabel='create new blog'>
-        <Add addHandler={addBlog} 
-    title={title} 
-    titleHandler={handleTitleChange}
-    author={author} 
-    authorHandler={handleAuthorChange} 
-    url={url} 
-    urlHandler={handleUrlChange}
-    likes={likes} 
-    likesHandler={handleLikesChange}
+        <AddBlog addHandler={addBlog} 
     />
     </Toggler>
   )
