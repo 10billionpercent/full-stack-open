@@ -17,7 +17,7 @@ const getBlogs = async () => {
     return res.data
 }
 
-const addBlog = async (newBlog, token) => {
+const addBlog = async (newBlog) => {
     const res = await axios.post(baseUrl, newBlog, config)
     return res.data
 }
@@ -27,7 +27,7 @@ const deleteBlog = async (id) => {
 }
 
 const updateBlog = async (id, updatedBlog) => {
-    const res = await axios.put(`${baseUrl}/${id}`, updatedBlog)
+    const res = await axios.put(`${baseUrl}/${id}`, updatedBlog, config)
     return res.data
 }
 

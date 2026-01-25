@@ -95,6 +95,7 @@ blogsRouter.delete('/:id', tokenExtractor, userExtractor, async (req, res, next)
 
 blogsRouter.put('/:id', tokenExtractor, userExtractor, async (req, res, next) => {
   const id = req.params.id
+  console.log(req.body)
   const { author, title, url, likes } = req.body
   const user = req.user
   const blogToUpdate = await Blog.findById(id)

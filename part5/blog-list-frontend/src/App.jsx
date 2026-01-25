@@ -89,6 +89,15 @@ const App = () => {
     }
   }
 
+  const updateLikes = async (blogToUpdate) => {
+    const currentLikes = blogToUpdate.likes
+    blogToUpdate.likes = currentLikes + 1
+    const id = blogs.find(b => b.id === blogToUpdate.id).id
+
+    const updatedBlog = await blogService.updateBlog(id, blogToUpdate, user.token)
+    setBlogs(blogs.map(blog => (blog.id !== id ? blog : updatedBlog))) 
+  }
+
   const loginForm = () => (
     <Login loginHandler={loginHandler} 
     username={username} 
@@ -109,7 +118,10 @@ const App = () => {
       {!user && loginForm()}
       {user && (
         <div>
-        <Blogs blogs ={blogs} name={user.name} logoutHandler = {logoutHandler} />
+        <Blogs blogs={blogs} 
+        name={user.name} 
+        logoutHandler={logoutHandler} 
+        updateHandler={updateLikes}/>
         {blogForm()}
         </div>
       )}
