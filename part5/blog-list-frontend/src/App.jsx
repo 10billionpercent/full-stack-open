@@ -94,12 +94,20 @@ const App = () => {
     blogToUpdate.likes = currentLikes + 1
     const id = blogs.find(b => b.id === blogToUpdate.id).id
 
-    const updatedBlog = await blogService.updateBlog(id, blogToUpdate, user.token)
+    const updatedBlog = await blogService.updateBlog(id, blogToUpdate)
     setBlogs(blogs.map(blog => (blog.id !== id 
       ? blog 
       : {...blog, likes: updatedBlog.likes}
     ))) 
   }
+
+  const deleteBlog = async (blogToDelete) => {
+    const id = blogs.find(b => b.id === blogToDelete.id).id
+    if (window.confirm(`Remove blog ${blogToDelete.title} by ${blogToDelete.author} ?`)) {
+    await blogService.deleteBlog(id, user.token)
+    setBlogs([...blogs].filter(blog => blog.id !== id))
+  }
+}
 
   const loginForm = () => (
     <Login loginHandler={loginHandler} 
@@ -108,12 +116,23 @@ const App = () => {
     password={password} 
     passwordHandler={handlePasswordChange}/>
 )
+
+const blogList = () => (
+  <Blogs blogs={blogs} 
+         username={user.username}
+        name={user.name} 
+        logoutHandler={logoutHandler} 
+        updateHandler={updateLikes}
+        deleteHandler={deleteBlog}/>
+)
+
   const blogForm = () => (
     <Toggler buttonLabel='create new blog'>
         <AddBlog addHandler={addBlog} 
     />
     </Toggler>
   )
+
   return (
     <div>
       <h1>Bloglist</h1>
@@ -121,10 +140,7 @@ const App = () => {
       {!user && loginForm()}
       {user && (
         <div>
-        <Blogs blogs={blogs} 
-        name={user.name} 
-        logoutHandler={logoutHandler} 
-        updateHandler={updateLikes}/>
+        {blogList()}
         {blogForm()}
         </div>
       )}

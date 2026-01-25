@@ -98,25 +98,19 @@ blogsRouter.put('/:id', tokenExtractor, userExtractor, async (req, res, next) =>
   console.log(req.body)
   const { author, title, url, likes } = req.body
   const user = req.user
+
+  if (!user) {
+     res.status(401).json({ error: 'token missing or invalid' })
+  }
+
   const blogToUpdate = await Blog.findById(id)
-    if (!blogToUpdate) {
+  if (!blogToUpdate) {
       return res.status(404).end()
     }
 
-    blogToUpdate.author = author
-    blogToUpdate.title = title
-    blogToUpdate.url = url
     blogToUpdate.likes = likes
-
-    if (blogToUpdate.user.toString() === user._id.toString()) {
-       const savedBlog = await blogToUpdate.save()
-      res.json(savedBlog)
-      user.save()
-    }
-
-    else {
-        return res.status(403).json({ error: 'forbidden' })
-    }
+    const savedBlog = await blogToUpdate.save()
+    res.json(savedBlog)
     })
 
 module.exports = blogsRouter

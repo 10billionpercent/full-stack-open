@@ -23,7 +23,7 @@ const addBlog = async (newBlog) => {
 }
 
 const deleteBlog = async (id) => {
-    await axios.delete(`${baseUrl}/${id}`)
+    await axios.delete(`${baseUrl}/${id}`, config)
 }
 
 const updateBlog = async (id, updatedBlog) => {
