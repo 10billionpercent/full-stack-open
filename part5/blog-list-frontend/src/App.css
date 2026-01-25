@@ -1,4 +1,11 @@
-html, button, input {
+html, input {
     background-color: #01141b;
     color: white;
+}
+
+button {
+    appearance: none;
+    background-color: #01141b;
+    color: white;
+    padding: 0;
 }
