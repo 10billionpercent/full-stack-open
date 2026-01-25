@@ -95,7 +95,10 @@ const App = () => {
     const id = blogs.find(b => b.id === blogToUpdate.id).id
 
     const updatedBlog = await blogService.updateBlog(id, blogToUpdate, user.token)
-    setBlogs(blogs.map(blog => (blog.id !== id ? blog : updatedBlog))) 
+    setBlogs(blogs.map(blog => (blog.id !== id 
+      ? blog 
+      : {...blog, likes: updatedBlog.likes}
+    ))) 
   }
 
   const loginForm = () => (
