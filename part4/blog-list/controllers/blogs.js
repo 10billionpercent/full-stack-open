@@ -11,12 +11,12 @@ blogsRouter.get('/', async (req, res) => {
   res.json(blogs)
   })
 
-blogsRouter.get('/my', tokenExtractor, userExtractor, async (req, res) => {
+/*blogsRouter.get('/my', tokenExtractor, userExtractor, async (req, res) => {
 const user = req.user
 
 const blogs = await Blog.find({ user: user._id })
   res.json(blogs)
-})
+})*/
 
 blogsRouter.get('/:id', async (req, res, next) => {
   const id = req.params.id

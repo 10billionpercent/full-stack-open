@@ -13,7 +13,7 @@ const setToken = newToken => {
 }
 
 const getBlogs = async () => {
-    const res = await axios.get(`${baseUrl}/my`, config)
+    const res = await axios.get(baseUrl)
     return res.data
 }
 
