@@ -93,20 +93,29 @@ blogsRouter.delete('/:id', tokenExtractor, userExtractor, async (req, res, next)
   }
 })
 
-blogsRouter.put('/:id', async (req, res, next) => {
+blogsRouter.put('/:id', tokenExtractor, userExtractor, async (req, res, next) => {
+  const id = req.params.id
   const { author, title, url, likes } = req.body
-  const blog = await Blog.findById(req.params.id)
-    if (!blog) {
+  const user = req.user
+  const blogToUpdate = await Blog.findById(id)
+    if (!blogToUpdate) {
       return res.status(404).end()
     }
 
-    blog.author = author
-    blog.title = title
-    blog.url = url
-    blog.likes = likes
+    blogToUpdate.author = author
+    blogToUpdate.title = title
+    blogToUpdate.url = url
+    blogToUpdate.likes = likes
 
-    const savedBlog = await blog.save()
+    if (blogToUpdate.user.toString() === user._id.toString()) {
+       const savedBlog = await blogToUpdate.save()
       res.json(savedBlog)
+      user.save()
+    }
+
+    else {
+        return res.status(403).json({ error: 'forbidden' })
+    }
     })
 
 module.exports = blogsRouter
