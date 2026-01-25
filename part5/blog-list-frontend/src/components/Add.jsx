@@ -1,29 +1,39 @@
-const Add = (props) => {
+const Add = ({
+  addHandler,
+  title,
+  author,
+  url,
+  likes,
+  titleHandler,
+  authorHandler,
+  urlHandler,
+  likesHandler
+}) => {
     return (
-        <form onSubmit={props.addHandler}>
-        <h2> Add new blog </h2>
+        <form onSubmit={addHandler}>
+        <h2> add new blog </h2>
         <div>
         <label>
           title
-          <input value ={props.title} onChange={props.titleHandler}/>
+          <input value ={title} onChange={titleHandler}/>
         </label>
         </div>
         <div>
         <label>
           author
-          <input value ={props.author} onChange={props.authorHandler}/>
+          <input value ={author} onChange={authorHandler}/>
         </label>
         </div>
         <div>
         <label>
           url
-          <input value ={props.url} onChange={props.urlHandler}/>
+          <input value ={url} onChange={urlHandler}/>
         </label>
         </div>
         <div>
         <label>
           likes
-          <input value ={props.likes} onChange={props.likesHandler}/>
+          <input value ={likes} onChange={likesHandler}/>
         </label>
         </div>
          <div>

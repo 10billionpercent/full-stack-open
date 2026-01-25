@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import Toggler from './components/Toggler'
 import Login from './components/Login'
 import Add from './components/Add'
 import Blogs from './components/Blogs'
@@ -11,7 +12,7 @@ const App = () => {
   const [blogs, setBlogs] = useState(() => {
     const currentBlogs = window.localStorage.getItem('blogs')
     return currentBlogs ? JSON.parse(currentBlogs) : []
-  }) 
+  })
   const [message, setMessage] = useState(null)
   const [type, setType] = useState('success')
   const [username, setUsername] = useState('')
@@ -114,18 +115,38 @@ const App = () => {
     }
   }
 
+  const loginForm = () => (
+    <Login loginHandler={loginHandler} 
+    username={username} 
+    usernameHandler={handleUsernameChange}
+    password={password} 
+    passwordHandler={handlePasswordChange}/>
+)
+  const blogForm = () => (
+    <Toggler buttonLabel='create new blog'>
+        <Add addHandler={addBlog} 
+    title={title} 
+    titleHandler={handleTitleChange}
+    author={author} 
+    authorHandler={handleAuthorChange} 
+    url={url} 
+    urlHandler={handleUrlChange}
+    likes={likes} 
+    likesHandler={handleLikesChange}
+    />
+    </Toggler>
+  )
   return (
     <div>
       <h1>Bloglist</h1>
       <Notification message={message} type = {type} />
-      {!user && <Login loginHandler={loginHandler} username={username} usernameHandler={handleUsernameChange}
-      password={password} passwordHandler={handlePasswordChange}/>}
-      {user && <Blogs blogs ={blogs} name={user.name} logoutHandler = {logoutHandler} />}
-      {user && <Add title={title} titleHandler={handleTitleChange}
-      author={author} authorHandler={handleAuthorChange} 
-      url={url} urlHandler={handleUrlChange}
-      likes={likes} likesHandler={handleLikesChange}
-      addHandler={addBlog} />}
+      {!user && loginForm()}
+      {user && (
+        <div>
+        <Blogs blogs ={blogs} name={user.name} logoutHandler = {logoutHandler} />
+        {blogForm()}
+        </div>
+      )}
        </div>  
   )
 }

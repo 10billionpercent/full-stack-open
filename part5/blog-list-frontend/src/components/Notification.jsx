@@ -12,13 +12,13 @@ const error = {
     borderRadius: '10px'
 }
 
-const Notification = (props) => {
-    if (props.message === null) {
+const Notification = ({ message, type }) => {
+    if (message === null) {
         return null
     }
     return (
-        <div style = {props.type === 'success' ? success : error}>
-            {props.message}
+        <div style = {type === 'success' ? success : error}>
+            {message}
         </div>
     )
 }
