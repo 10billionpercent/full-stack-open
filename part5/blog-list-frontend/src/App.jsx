@@ -23,37 +23,37 @@ const App = () => {
   })
 
   useEffect(() => {
-     if (user) {
-        blogService.setToken(user.token)
-     }
+    if (user) {
+      blogService.setToken(user.token)
+    }
   }, [user])
 
   useEffect(() => {
     async function fetchBlogs() {
-    if (user) {
-    const blogs = await blogService.getBlogs()
-    setBlogs(blogs)
-    window.localStorage.setItem(
-        'blogs', JSON.stringify(blogs)
-      )
-    }
+      if (user) {
+        const blogs = await blogService.getBlogs()
+        setBlogs(blogs)
+        window.localStorage.setItem(
+          'blogs', JSON.stringify(blogs)
+        )
+      }
     }
     fetchBlogs()
-      }, [user])
+  }, [user])
 
   const handleUsernameChange = (e) => {
-        setUsername(e.target.value)
+    setUsername(e.target.value)
   }
   const handlePasswordChange = (e) => {
-        setPassword(e.target.value)
+    setPassword(e.target.value)
   }
 
   const updateMessage = (newMessage, newType='success') => {
     setMessage(newMessage)
     setType(newType)
-      setTimeout(() => {
-        setMessage(null)
-      }, 5000)
+    setTimeout(() => {
+      setMessage(null)
+    }, 5000)
   }
 
   const loginHandler = async (e) => {
@@ -80,10 +80,10 @@ const App = () => {
 
   const addBlog = async (newBlog) => {
     try {
-     const addedBlog = await blogService.addBlog(newBlog, user.token)
-    setBlogs([...blogs, addedBlog])
-    updateMessage(`Added ${addedBlog.title} by ${addedBlog.author}`, 'success')
-    } 
+      const addedBlog = await blogService.addBlog(newBlog, user.token)
+      setBlogs([...blogs, addedBlog])
+      updateMessage(`Added ${addedBlog.title} by ${addedBlog.author}`, 'success')
+    }
     catch (err) {
       updateMessage(err.response.data.error, 'error')
     }
@@ -95,41 +95,40 @@ const App = () => {
     const id = blogs.find(b => b.id === blogToUpdate.id).id
 
     const updatedBlog = await blogService.updateBlog(id, blogToUpdate)
-    setBlogs(blogs.map(blog => (blog.id !== id 
-      ? blog 
-      : {...blog, likes: updatedBlog.likes}
-    ))) 
+    setBlogs(blogs.map(blog => (blog.id !== id
+      ? blog
+      : { ...blog, likes: updatedBlog.likes }
+    )))
   }
 
   const deleteBlog = async (blogToDelete) => {
     const id = blogs.find(b => b.id === blogToDelete.id).id
     if (window.confirm(`Remove blog ${blogToDelete.title} by ${blogToDelete.author} ?`)) {
-    await blogService.deleteBlog(id, user.token)
-    setBlogs([...blogs].filter(blog => blog.id !== id))
+      await blogService.deleteBlog(id, user.token)
+      setBlogs([...blogs].filter(blog => blog.id !== id))
+    }
   }
-}
 
   const loginForm = () => (
-    <Login loginHandler={loginHandler} 
-    username={username} 
-    usernameHandler={handleUsernameChange}
-    password={password} 
-    passwordHandler={handlePasswordChange}/>
-)
+    <Login loginHandler={loginHandler}
+      username={username}
+      usernameHandler={handleUsernameChange}
+      password={password}
+      passwordHandler={handlePasswordChange}/>
+  )
 
-const blogList = () => (
-  <Blogs blogs={blogs} 
-         username={user.username}
-        name={user.name} 
-        logoutHandler={logoutHandler} 
-        updateHandler={updateLikes}
-        deleteHandler={deleteBlog}/>
-)
+  const blogList = () => (
+    <Blogs blogs={blogs}
+      username={user.username}
+      name={user.name}
+      logoutHandler={logoutHandler}
+      updateHandler={updateLikes}
+      deleteHandler={deleteBlog}/>
+  )
 
   const blogForm = () => (
     <Toggler buttonLabel='create new blog'>
-        <AddBlog addHandler={addBlog} 
-    />
+      <AddBlog addHandler={addBlog}/>
     </Toggler>
   )
 
@@ -140,11 +139,11 @@ const blogList = () => (
       {!user && loginForm()}
       {user && (
         <div>
-        {blogList()}
-        {blogForm()}
+          {blogList()}
+          {blogForm()}
         </div>
       )}
-       </div>  
+    </div>
   )
 }
 

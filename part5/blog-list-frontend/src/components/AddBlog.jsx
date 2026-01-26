@@ -10,50 +10,50 @@ const Add = ({ addHandler }) => {
   const addBlog = (e) => {
     e.preventDefault()
     if (title === '' || author === '' || url === '') {
-    alert('enter all details')
+      alert('enter all details')
       return
     }
-    addHandler({title: title, 
-      author: author, 
-      url: url, 
-      likes: likes})
+    addHandler({ title: title,
+      author: author,
+      url: url,
+      likes: likes })
     setTitle('')
     setAuthor('')
-    setUrl('') 
-    setLikes('')  
+    setUrl('')
+    setLikes('')
   }
 
-    return (
-        <form onSubmit={addBlog}>
-        <h2> add new blog </h2>
-        <div>
+  return (
+    <form onSubmit={addBlog}>
+      <h2> add new blog </h2>
+      <div>
         <label>
           title
           <input value ={title} onChange={e => setTitle(e.target.value)}/>
         </label>
-        </div>
-        <div>
+      </div>
+      <div>
         <label>
           author
           <input value ={author} onChange={e => setAuthor(e.target.value)}/>
         </label>
-        </div>
-        <div>
+      </div>
+      <div>
         <label>
           url
           <input value ={url} onChange={e => setUrl(e.target.value)}/>
         </label>
-        </div>
-        <div>
+      </div>
+      <div>
         <label>
           likes
           <input value ={likes} onChange={e => setLikes(e.target.value)}/>
         </label>
-        </div>
-         <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
-    )
+      </div>
+      <div>
+        <button type="submit">add</button>
+      </div>
+    </form>
+  )
 }
 export default Add
