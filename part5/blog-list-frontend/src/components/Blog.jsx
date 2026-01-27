@@ -30,13 +30,13 @@ const Blog = ({ blog, updateHandler, username, deleteHandler }) => {
         gap: '12px'
       }}>
         <h4> {blog.title} </h4>
+        <p> by <b><i> {blog.author}</i></b>  </p>
         <button onClick={toggleVisiblity}> {buttonLabel} </button>
       </div>
       <div style={showWhenVisible}>
         <p> <b> url </b> {blog.url} </p>
         <p> <b> likes </b> {blog.likes}
           <button onClick={() => updateHandler(blog)}> like </button></p>
-        <p> <b> author </b> {blog.author} </p>
         <button style={deleteButtonVisible}
           onClick={() => deleteHandler(blog)}> <b>remove </b> </button>
       </div>
