@@ -24,12 +24,17 @@ describe('<Blog />', () => {
     )
   })
 
-  test('renders blog title', () => {
+  test('renders blog title and author', () => {
     screen.getByText('React patterns')
+    screen.getByText('Hange Zoë')
   })
 
-  test('renders blog author', () => {
-    screen.getByText('Hange Zoë')
+  test('before clicking the button, url and likes are not displayed', () => {
+    const url = screen.getByText('https://titansrwonderful.com/')
+    expect(url).not.toBeVisible()
+
+    const likes = screen.getByText('7')
+    expect(likes).not.toBeVisible()
   })
 
   test('after clicking the button, url and likes are displayed', async () => {
