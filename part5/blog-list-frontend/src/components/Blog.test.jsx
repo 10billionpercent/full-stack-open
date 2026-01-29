@@ -25,15 +25,15 @@ describe('<Blog />', () => {
   })
 
   test('renders blog title and author', () => {
-    screen.getByText('React patterns')
-    screen.getByText('Hange Zoë')
+    screen.getByText(blog.title)
+    screen.getByText(blog.author)
   })
 
   test('before clicking the button, url and likes are not displayed', () => {
-    const url = screen.getByText('https://titansrwonderful.com/')
+    const url = screen.queryByText(blog.url)
     expect(url).not.toBeVisible()
 
-    const likes = screen.getByText('7')
+    const likes = screen.queryByText('7')
     expect(likes).not.toBeVisible()
   })
 
@@ -47,5 +47,17 @@ describe('<Blog />', () => {
 
     const likes = screen.getByText('7')
     expect(likes).toBeVisible()
+  })
+
+  test('clicking like button twice calls the updateHandler twice', async () => {
+    const user = userEvent.setup()
+    const showButton = screen.getByText('show')
+    await user.click(showButton)
+
+    const likeButton = screen.getByText('like')
+    await user.click(likeButton)
+    await user.click(likeButton)
+
+    expect(updateHandler.mock.calls).toHaveLength(2)
   })
 })
