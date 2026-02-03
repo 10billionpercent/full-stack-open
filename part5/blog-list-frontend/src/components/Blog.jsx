@@ -21,9 +21,7 @@ const Blog = ({ blog, updateHandler, username, deleteHandler }) => {
   }
 
   return (
-    <div style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.678)' ,
-      padding: '2px'
-    }}>
+    <div className ="blog">
       <div style= {{ display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',

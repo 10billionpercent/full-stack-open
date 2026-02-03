@@ -1,5 +1,5 @@
 const { test, describe, expect, beforeEach } = require('@playwright/test')
-const { loginWith } = require('./helper')
+const { loginWith, createBlog } = require('./helper')
 
 describe('bloglist', () => {
     beforeEach(async ({ page, request }) => {
@@ -44,8 +44,22 @@ describe('bloglist', () => {
 
         await expect(page.getByText('Orange Cat logged in')).not.toBeVisible()
     })
-    
     })
     
+    describe('when logged in', () => {
+        beforeEach(async ({ page }) => {
+            await loginWith(page, 'meowmeow', 'meow123')
+        })
+
+        test.only('a new blog can be created', async ({ page }) => {
+            await createBlog(page,
+            'testing blog creation',
+            'me',
+            'https://meow.com',
+            '10')
+            const addedBlog = page.locator('.blog')
+            await expect(addedBlog).toContainText('testing blog creation by me')
+        })
+    })
 
 })

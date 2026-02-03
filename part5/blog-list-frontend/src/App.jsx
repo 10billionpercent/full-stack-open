@@ -81,7 +81,8 @@ const App = () => {
   const addBlog = async (newBlog) => {
     try {
       const addedBlog = await blogService.addBlog(newBlog, user.token)
-      setBlogs([...blogs, addedBlog])
+      const blogsAfterAdding = await blogService.getBlogs()
+      setBlogs(blogsAfterAdding)
       updateMessage(`Added ${addedBlog.title} by ${addedBlog.author}`, 'success')
     }
     catch (err) {
