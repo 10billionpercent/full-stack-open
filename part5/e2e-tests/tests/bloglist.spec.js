@@ -51,7 +51,7 @@ describe('bloglist', () => {
             await loginWith(page, 'meowmeow', 'meow123')
         })
 
-        test.only('a new blog can be created', async ({ page }) => {
+        test('a new blog can be created', async ({ page }) => {
             await createBlog(page,
             'testing blog creation',
             'me',
@@ -59,6 +59,24 @@ describe('bloglist', () => {
             '10')
             const addedBlog = page.locator('.blog')
             await expect(addedBlog).toContainText('testing blog creation by me')
+        })
+
+        test.only('a blog can be liked', async ({ page }) => {
+            await createBlog(page,
+            'testing blog creation',
+            'me',
+            'https://meow.com',
+            '10')
+            await page.getByRole('button', { name: 'show' }).click()
+
+            const blog = page.locator('.blog')
+            const likesParagraph = blog.locator('p', { hasText: 'likes' })
+            const likesTextBefore = await likesParagraph.textContent()
+            const likesBefore = Number(likesTextBefore.match(/\d+/))
+
+            await blog.getByRole('button', { name: 'like' }).click()
+            
+            await expect(likesParagraph).toContainText(`likes ${ likesBefore + 1 }`)
         })
     })
 
