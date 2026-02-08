@@ -12,6 +12,15 @@ describe('bloglist', () => {
                 password: 'meow123'
             }
         })
+
+        await request.post('/api/users', {
+            data:
+            {
+                name: 'Black Cat',
+                username: 'mrrpmeow',
+                password: 'meow12345'
+            }
+        })
         await page.goto('http://localhost:5173')
     })
 
@@ -61,7 +70,7 @@ describe('bloglist', () => {
             await expect(addedBlog).toContainText('testing blog creation by me')
         })
 
-        test.only('a blog can be liked', async ({ page }) => {
+        test('a blog can be liked', async ({ page }) => {
             await createBlog(page,
             'testing blog creation',
             'me',
@@ -78,6 +87,27 @@ describe('bloglist', () => {
             
             await expect(likesParagraph).toContainText(`likes ${ likesBefore + 1 }`)
         })
+
+        test.only('only the blog creator can see the delete button', async ({ page }) => {
+            await createBlog(page,
+            'testing blog creation',
+            'me',
+            'https://meow.com',
+            '10')
+            await page.getByRole('button', { name: 'show' }).click()
+
+            let blog = page.locator('.blog')
+            let deleteButton = blog.locator('button', { hasText: 'remove' })
+            await expect(deleteButton).toBeVisible()
+
+            await page.getByRole('button', { name: 'logout' }).click()
+            await loginWith(page, 'mrrpmeow', 'meow12345')
+
+            await page.getByRole('button', { name: 'show' }).click()
+            blog = page.locator('.blog')
+            deleteButton = blog.locator('button', { hasText: 'remove' })
+            await expect(deleteButton).not.toBeVisible()
+        }) 
     })
 
 })
