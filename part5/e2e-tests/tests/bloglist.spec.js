@@ -88,7 +88,7 @@ describe('bloglist', () => {
             await expect(likesParagraph).toContainText(`likes ${ likesBefore + 1 }`)
         })
 
-        test.only('only the blog creator can see the delete button', async ({ page }) => {
+        test('only the blog creator can see the delete button', async ({ page }) => {
             await createBlog(page,
             'testing blog creation',
             'me',
@@ -108,6 +108,24 @@ describe('bloglist', () => {
             deleteButton = blog.locator('button', { hasText: 'remove' })
             await expect(deleteButton).not.toBeVisible()
         }) 
+
+        test.only('only the blog creator can delete the blog', async ({ page }) => {
+            page.on('dialog', async dialog => {
+                await dialog.accept()
+            })
+
+            await createBlog(page,
+            'testing blog creation',
+            'me',
+            'https://meow.com',
+            '10')
+            await page.getByRole('button', { name: 'show' }).click()
+
+            let blog = page.locator('.blog')
+            await blog.getByRole('button', { name: 'remove' }).click()
+
+            await expect(page.locator('.blog')).toHaveCount(0)
+        })
     })
 
 })
