@@ -22,6 +22,8 @@ describe('bloglist', () => {
             }
         })
         await page.goto('http://localhost:5173')
+        await page.evaluate(() => window.localStorage.clear())
+        await page.reload()
     })
 
     test('login form is shown', async ({ page }) => {
@@ -109,7 +111,7 @@ describe('bloglist', () => {
             await expect(deleteButton).not.toBeVisible()
         }) 
 
-        test.only('only the blog creator can delete the blog', async ({ page }) => {
+        test('only the blog creator can delete the blog', async ({ page }) => {
             page.on('dialog', async dialog => {
                 await dialog.accept()
             })
@@ -125,6 +127,29 @@ describe('bloglist', () => {
             await blog.getByRole('button', { name: 'remove' }).click()
 
             await expect(page.locator('.blog')).toHaveCount(0)
+        })
+
+        test.only('blogs are always displayed in descending order of likes', async ({ page }) => {
+            await createBlog(page,
+            'blog displayed last',
+            'me',
+            'https://meow3meow.com',
+            '10')
+            await createBlog(page,
+            'blog displayed second',
+            'me',
+            'https://meow2meow.com',
+            '100')
+            await createBlog(page,
+            'blog displayed first',
+            'me',
+            'https://meow1meow.com',
+            '1000')
+            const blogs = page.locator('.blog')
+
+            await expect(blogs.nth(0)).toContainText('blog displayed first')
+            await expect(blogs.nth(1)).toContainText('blog displayed second')
+            await expect(blogs.nth(2)).toContainText('blog displayed last')
         })
     })
 
