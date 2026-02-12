@@ -65,4 +65,20 @@ test('bad is incremented', () => {
         bad: 1
     })
 })
+
+test('resets all types to 0', () => {
+    const action ={
+        type: 'RESET'
+    }
+
+    const state = initialState
+
+    deepFreeze(state)
+    const newState = ratingReducer(state, action)
+    expect(newState).toEqual({
+        good: 0,
+        neutral: 0,
+        bad: 0
+    })
+})
 })
