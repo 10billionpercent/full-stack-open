@@ -8,7 +8,7 @@ const ratingReducer = (state = initialState, action) => {
     console.log(action)
     switch (action.type) {
         case 'GOOD':
-            return state
+            return {...state, good: state.good + 1}
         case 'BAD':
             return state
         case 'NEUTRAL':
