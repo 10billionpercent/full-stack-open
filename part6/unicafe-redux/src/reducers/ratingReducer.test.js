@@ -33,4 +33,20 @@ test('good is incremented', () => {
         bad: 0
     })
 })
+
+test('neutral is incremented', () => {
+    const action ={
+        type: 'NEUTRAL'
+    }
+
+    const state = initialState
+
+    deepFreeze(state)
+    const newState = ratingReducer(state, action)
+    expect(newState).toEqual({
+        good: 0,
+        neutral: 1,
+        bad: 0
+    })
+})
 })
