@@ -13,7 +13,7 @@ const ratingReducer = (state = initialState, action) => {
         case 'BAD':
             return {...state, bad: state.bad + 1}
         case 'RESET':
-            return state
+            return initialState
         default:
             return state
     }
