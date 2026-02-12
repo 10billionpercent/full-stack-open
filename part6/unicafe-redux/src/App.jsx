@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import './App.css'
 
 const Button = (props) => {
@@ -25,7 +24,7 @@ const Statistics = (props) => {
     )
   }
   return (
-    <>
+    <div>
                 <h1> Statistics </h1>
                 <table> 
                   <tbody>
@@ -38,26 +37,46 @@ const Statistics = (props) => {
             </tbody>
             </table>
               
-    </>
+    </div>
   )
 }
-function App() {
-  const [good, setGood] = useState(0)
-  const [neutral, setNeutral] = useState(0)
-  const [bad, setBad] = useState(0)
 
+function App({ store }) {
+  const goodRating = () => {
+  store.dispatch({
+    type: 'GOOD'
+  })
+}
+
+const neutralRating = () => {
+  store.dispatch({
+    type: 'NEUTRAL'
+  })
+}
+
+const badRating = () => {
+  store.dispatch({
+    type: 'BAD'
+  })
+}
+
+const resetRating = () => {
+  store.dispatch({
+    type: 'RESET'
+  })
+}
   return (
     <>
       <h1> Give Feedback </h1>
-      <Button onClick={() => setGood(good+1)} text="Good"/>
-        <Button onClick={() => setNeutral(neutral+1)} text="Neutral"/>
-          <Button onClick={() => setBad(bad+1)} text="Bad"/>
-          <Button onClick={() => {
-            setGood(0)
-            setNeutral(0)
-            setBad(0)
-          }} text='Reset'/>
-            <Statistics good={good} neutral={neutral} bad={bad}/>
+      <div style = {{display: 'flex', flexDirection: 'row', gap: '12px'}}>
+      <Button onClick={goodRating} text="Good"/>
+        <Button onClick={neutralRating} text="Neutral"/>
+          <Button onClick={badRating} text="Bad"/>
+          <Button onClick={resetRating} text='Reset'/>
+      </div>
+            <Statistics good={store.getState().good} 
+            neutral={store.getState().neutral} 
+            bad={store.getState().bad}/>
     </>
   )
 }

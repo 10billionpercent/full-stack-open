@@ -1,10 +1,17 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
+import ReactDOM from 'react-dom/client'
+import { createStore } from 'redux'
+import ratingReducer from './reducers/ratingReducer'
 import App from './App.jsx'
+import './index.css'
 
-createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
-)
+const store = createStore(ratingReducer)
+
+const root = ReactDOM.createRoot(document.getElementById('root'))
+
+const renderApp = () => {
+  root.render(<App store={store}/>)
+}
+
+renderApp()
+store.subscribe(renderApp)
+
