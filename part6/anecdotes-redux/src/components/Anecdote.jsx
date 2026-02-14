@@ -1,5 +1,5 @@
 const Anecdote = ({ anecdote, handleClick }) => {
-      return (
+    return (
     <div>
       <div style= {{ display: 'flex',
         flexDirection: 'row',
@@ -7,7 +7,7 @@ const Anecdote = ({ anecdote, handleClick }) => {
         gap: '12px'
       }}>
         <p> {anecdote.content} </p>
-        <p> <b> votes </b> {anecdote.likes}
+        <p> <b> votes </b> {anecdote.votes}
           <button onClick={handleClick}> vote </button></p>
       </div>
     </div>

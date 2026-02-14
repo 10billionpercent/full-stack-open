@@ -11,6 +11,8 @@ const voteReducer = (state = [], action) => {
             }
             return state.map(a => (a.id !== id ? a : votedAnecdote))
         }
+        default:
+            return state
     }
 }
 

@@ -6,10 +6,14 @@ const AnecdoteList = () => {
   const dispatch = useDispatch()
   const anecdotes = useSelector(state => state)
 
-  const sortedAnecdotes = [...anecdotes].sort((a,b) => b.likes - a.likes)
+  if (anecdotes.length === 0) {
+    return (
+      <h2> No anecdotes yet </h2>
+    )
+  }
+  const sortedAnecdotes = [...anecdotes].sort((a,b) => b.votes - a.votes)
   return (
     <>
-      <h2>Anecdotes</h2>
       <ul>
         {sortedAnecdotes.map(anecdote => <Anecdote key={anecdote.id}
           anecdote={anecdote}
