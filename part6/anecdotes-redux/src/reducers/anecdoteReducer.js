@@ -1,4 +1,4 @@
-const voteReducer = (state = [], action) => {
+const anecdoteReducer = (state = [], action) => {
     switch (action.type) {
         case 'NEW_ANECDOTE':
             return [...state, action.payload]
@@ -36,4 +36,4 @@ export const voteAnecdote = id => {
     }
 }
 
-export default voteReducer
+export default anecdoteReducer
