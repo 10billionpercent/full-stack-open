@@ -2,3 +2,10 @@ html, button {
     background-color: #01141b;
     color: white;
 }
+
+.notification {
+  color: #07b9e6;
+  padding: 10px;
+  border: 1px solid #07b9e6;
+  border-radius: 10px;
+}
