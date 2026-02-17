@@ -8,10 +8,10 @@ const AnecdoteForm = () => {
     onSuccess: queryClient.invalidateQueries({ querykey: ['anecdotes'] })
   })
 
-  const onCreate = (event) => {
-    event.preventDefault()
-    const content = event.target.anecdote.value
-    event.target.anecdote.value = ''
+  const onCreate = (e) => {
+    e.preventDefault()
+    const content = e.target.anecdote.value
+    e.target.anecdote.value = ''
     newAnecdoteMutation.mutate({ content, votes: 0 })
   }
 
