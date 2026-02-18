@@ -4,11 +4,11 @@ const notificationReducer = (state, action) => {
     const content = action.payload
     switch (action.type) {
         case 'ADDED':
-            return `you added '${content}'`
+            return { message: `you added '${content}'`, type: 'success' }
         case 'VOTED':
-            return `you voted for '${content}'`
+            return { message: `you voted for '${content}'`, type: 'success' }
         case 'ERROR':
-            return 'too short anecdote, must have length 5 or more'
+            return { message:'too short anecdote, must have length 5 or more', type: 'error' }
         case 'CLEAR':
             return null
         default:

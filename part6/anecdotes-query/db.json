@@ -32,7 +32,7 @@
     },
     {
       "content": "meowing",
-      "votes": 37,
+      "votes": 39,
       "id": "RKFszoO"
     },
     {
@@ -72,8 +72,38 @@
     },
     {
       "content": "meowing meow meow",
-      "votes": 7,
+      "votes": 8,
       "id": "mabbswD"
+    },
+    {
+      "content": "meowing cat",
+      "votes": 0,
+      "id": "764qZoU"
+    },
+    {
+      "content": "hi   ",
+      "votes": 0,
+      "id": "85S-Zmg"
+    },
+    {
+      "content": "hi      ",
+      "votes": 0,
+      "id": "QCZH9hN"
+    },
+    {
+      "content": "hi       ",
+      "votes": 0,
+      "id": "zS5W8jT"
+    },
+    {
+      "content": "meowing",
+      "votes": 0,
+      "id": "DecaFMS"
+    },
+    {
+      "content": "meowing meowing cat",
+      "votes": 0,
+      "id": "hZFODnf"
     }
   ]
 }

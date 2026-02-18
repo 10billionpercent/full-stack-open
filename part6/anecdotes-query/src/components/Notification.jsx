@@ -9,9 +9,9 @@ const success = {
 }
 
 const error = {
-    color: '#e52929ff', 
+    color: '#ea3c3c', 
     padding: '10px',
-    border: '1px solid #e52929ff',
+    border: '1px solid #ea3c3c',
     borderRadius: '10px'
 }
 
@@ -21,8 +21,8 @@ const Notification = () => {
         return null
     }
     return (
-        <div style = {success}>
-            {notification}
+        <div style = {notification.type === 'success' ? success : error}>
+            {notification.message}
         </div>
     )
 }
