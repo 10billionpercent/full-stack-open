@@ -1,4 +1,4 @@
-import Anecdote from "./Anecdote"
+import { Link } from 'react-router-dom'
 
 const AnecdoteList = ({ anecdotes }) => {
 
@@ -11,9 +11,11 @@ const AnecdoteList = ({ anecdotes }) => {
   return (
     <>
       <ul>
-        {sortedAnecdotes.map(anecdote => <Anecdote key={anecdote.id}
-          anecdote={anecdote}
-        />)}
+        {sortedAnecdotes.map(anecdote => 
+          <li key={anecdote.id}>
+            <Link to={`/${anecdote.id}`}>{anecdote.content}</Link>
+          </li>
+        )}
       </ul>
     </>
   )

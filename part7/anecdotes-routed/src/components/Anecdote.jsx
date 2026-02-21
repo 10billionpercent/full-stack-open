@@ -2,12 +2,13 @@ const Anecdote = ({ anecdote }) => {
     return (
     <div>
       <div style= {{ display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: '12px'
+        flexDirection: 'column',
+        alignItems: 'left',
+        gap: '2px'
       }}>
-        <p> {anecdote.content} </p>
+        <h2> {anecdote.content} </h2>
         <p> <b> votes </b> {anecdote.votes} </p>
+        <p> for more info see &ensp; <a href={anecdote.info}>{anecdote.info}</a> </p>
       </div>
     </div>
   )
