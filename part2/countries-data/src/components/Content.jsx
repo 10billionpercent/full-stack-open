@@ -2,7 +2,6 @@ import Country from "./Country"
 
 const Content = ({contentData, type, searchHandler}) => {
 const length = contentData.length
-console.log(contentData,type)
 if (type === '' ) return
 if (type === 'array')  {
     if (length === 0) {

@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import Content from './components/Content'
@@ -53,7 +52,7 @@ useEffect(() =>{if (query) {getCountryData(query)}}, [query])
   return (
     <div>
     <input value={country} onChange={handleCountryChange} placeholder='enter country name'/> 
-    <button onClick={submitCountry}> meow </button>
+    <button onClick={submitCountry}> search </button>
     <Content contentData={content} type={type} searchHandler={getCountryData}/>
     </div>
   )
