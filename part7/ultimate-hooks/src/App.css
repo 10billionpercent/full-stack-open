@@ -1,0 +1,12 @@
+html, button, input {
+    background-color: #01141b;
+    color: white;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: fit-content;
+}
+
