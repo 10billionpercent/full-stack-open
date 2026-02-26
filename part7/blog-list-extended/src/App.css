@@ -1,0 +1,11 @@
+html, input {
+    background-color: #f90707;
+    color: white;
+}
+
+button {
+    appearance: none;
+    background-color: #01141b;
+    color: white;
+    padding: 0;
+}
