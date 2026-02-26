@@ -3,7 +3,7 @@ const Login = ({
   username,
   password,
   usernameHandler,
-  passwordHandler
+  passwordHandler,
 }) => {
   return (
     <form onSubmit={loginHandler}>
@@ -11,19 +11,19 @@ const Login = ({
       <div>
         <label>
           username
-          <input value ={username} onChange={usernameHandler}/>
+          <input value={username} onChange={usernameHandler} />
         </label>
       </div>
       <div>
         <label>
           password
-          <input type="password" value ={password} onChange={passwordHandler}/>
+          <input type="password" value={password} onChange={passwordHandler} />
         </label>
       </div>
       <div>
         <button type="submit">login</button>
       </div>
     </form>
-  )
-}
-export default Login
+  );
+};
+export default Login;
