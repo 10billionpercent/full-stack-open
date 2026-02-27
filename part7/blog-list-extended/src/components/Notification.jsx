@@ -1,25 +1,27 @@
 const success = {
-  color: "#12e607",
-  padding: "10px",
-  border: "1px solid #12e607",
-  borderRadius: "10px",
-};
+  color: '#12e607',
+  padding: '10px',
+  border: '1px solid #12e607',
+  borderRadius: '10px',
+}
 
 const error = {
-  color: "#e52929ff",
-  padding: "10px",
-  border: "1px solid #e52929ff",
-  borderRadius: "10px",
-};
+  color: '#e52929ff',
+  padding: '10px',
+  border: '1px solid #e52929ff',
+  borderRadius: '10px',
+}
 
-const Notification = ({ message, type }) => {
-  if (message === null) {
-    return null;
+const Notification = ({ notification }) => {
+  if (!notification) {
+    return null
   }
+  const { message, type } = notification
+  console.log('notif recieved', message, type)
   return (
-    <div id="notification" style={type === "success" ? success : error}>
+    <div id="notification" style={type === 'success' ? success : error}>
       {message}
     </div>
-  );
-};
-export default Notification;
+  )
+}
+export default Notification
