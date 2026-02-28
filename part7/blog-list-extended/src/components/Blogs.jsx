@@ -1,4 +1,4 @@
-import Blog from "./Blog";
+import Blog from './Blog'
 
 const Blogs = ({
   username,
@@ -8,12 +8,12 @@ const Blogs = ({
   updateHandler,
   deleteHandler,
 }) => {
-  const sortedBlogs = [...blogs].sort((a, b) => b.likes - a.likes);
+  const sortedBlogs = [...blogs].sort((a, b) => b.likes - a.likes)
   return (
     <>
       <h4>
-        {name} logged in{" "}
-        <button onClick={() => logoutHandler()}> logout </button>{" "}
+        {name} logged in
+        <button onClick={() => logoutHandler()}> logout </button>
       </h4>
       <h2>Blogs</h2>
       <ul>
@@ -28,6 +28,6 @@ const Blogs = ({
         ))}
       </ul>
     </>
-  );
-};
-export default Blogs;
+  )
+}
+export default Blogs

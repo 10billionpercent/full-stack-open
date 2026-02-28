@@ -18,7 +18,6 @@ const { setNotification, removeNotification } = notificationSlice.actions
 let timeoutId = null
 
 export const setNotificationWithTimeout = (message, type) => {
-  console.log('notif sent', message, type)
   return (dispatch) => {
     if (timeoutId) {
       clearTimeout(timeoutId)

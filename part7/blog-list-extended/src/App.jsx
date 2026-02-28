@@ -2,18 +2,19 @@ import { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import Toggler from './components/Toggler'
 import Login from './components/Login'
-import AddBlog from './components/AddBlog'
+import AddBlog from './components/BlogForm'
 import Blogs from './components/Blogs'
 import Notification from './components/Notification'
 import loginService from './services/login'
 import blogService from './services/blogs'
+import { setBlogs } from './reducers/blogReducer'
 import { setNotificationWithTimeout } from './reducers/notificationReducer'
 
 const App = () => {
-  const [blogs, setBlogs] = useState(() => {
+  /*const [blogs, setBlogs] = useState(() => {
     const currentBlogs = window.localStorage.getItem('blogs')
     return currentBlogs ? JSON.parse(currentBlogs) : []
-  })
+  })*/
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(() => {
@@ -22,6 +23,7 @@ const App = () => {
   })
 
   const notification = useSelector((state) => state.notification)
+  const blogs = useSelector((state) => state.blogs)
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -34,12 +36,12 @@ const App = () => {
     async function fetchBlogs() {
       if (user) {
         const blogs = await blogService.getBlogs()
-        setBlogs(blogs)
+        dispatch(setBlogs(blogs))
         window.localStorage.setItem('blogs', JSON.stringify(blogs))
       }
     }
     fetchBlogs()
-  }, [user])
+  }, [dispatch, user])
 
   const handleUsernameChange = (e) => {
     setUsername(e.target.value)
@@ -70,20 +72,6 @@ const App = () => {
   const logoutHandler = () => {
     window.localStorage.clear()
     setUser(null)
-  }
-
-  const addBlog = async (newBlog) => {
-    try {
-      const addedBlog = await blogService.addBlog(newBlog, user.token)
-      const blogsAfterAdding = await blogService.getBlogs()
-      setBlogs(blogsAfterAdding)
-      updateMessage(
-        `Added ${addedBlog.title} by ${addedBlog.author}`,
-        'success',
-      )
-    } catch (err) {
-      updateMessage(err.response.data.error, 'error')
-    }
   }
 
   const updateLikes = async (blogToUpdate) => {
@@ -134,7 +122,7 @@ const App = () => {
 
   const blogForm = () => (
     <Toggler buttonLabel="create new blog">
-      <AddBlog addHandler={addBlog} />
+      <AddBlog user={user} />
     </Toggler>
   )
 

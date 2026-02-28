@@ -17,7 +17,6 @@ const Notification = ({ notification }) => {
     return null
   }
   const { message, type } = notification
-  console.log('notif recieved', message, type)
   return (
     <div id="notification" style={type === 'success' ? success : error}>
       {message}
