@@ -74,19 +74,6 @@ const App = () => {
     setUser(null)
   }
 
-  const updateLikes = async (blogToUpdate) => {
-    const currentLikes = blogToUpdate.likes
-    blogToUpdate.likes = currentLikes + 1
-    const id = blogs.find((b) => b.id === blogToUpdate.id).id
-
-    const updatedBlog = await blogService.updateBlog(id, blogToUpdate)
-    setBlogs(
-      blogs.map((blog) =>
-        blog.id !== id ? blog : { ...blog, likes: updatedBlog.likes },
-      ),
-    )
-  }
-
   const deleteBlog = async (blogToDelete) => {
     const id = blogs.find((b) => b.id === blogToDelete.id).id
     if (
@@ -115,7 +102,6 @@ const App = () => {
       username={user.username}
       name={user.name}
       logoutHandler={logoutHandler}
-      updateHandler={updateLikes}
       deleteHandler={deleteBlog}
     />
   )

@@ -43,7 +43,13 @@ export const increaseLikes = (blog) => {
       likes: blog.likes + 1,
     }
     const updatedBlog = await blogService.updateBlog(likedBlog)
-    dispatch(likeBlog(updatedBlog))
+
+    dispatch(
+      likeBlog({
+        ...updatedBlog,
+        user: blog.user,
+      }),
+    )
   }
 }
 

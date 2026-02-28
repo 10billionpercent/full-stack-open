@@ -26,7 +26,8 @@ const deleteBlog = async (id) => {
   await axios.delete(`${baseUrl}/${id}`, config)
 }
 
-const updateBlog = async (id, updatedBlog) => {
+const updateBlog = async (updatedBlog) => {
+  const id = updatedBlog.id
   const res = await axios.put(`${baseUrl}/${id}`, updatedBlog, config)
   return res.data
 }

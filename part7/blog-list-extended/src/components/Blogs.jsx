@@ -1,14 +1,15 @@
 import Blog from './Blog'
+import { useDispatch } from 'react-redux'
+import { increaseLikes } from '../reducers/blogReducer'
 
-const Blogs = ({
-  username,
-  name,
-  logoutHandler,
-  blogs,
-  updateHandler,
-  deleteHandler,
-}) => {
+const Blogs = ({ username, name, logoutHandler, blogs, deleteHandler }) => {
+  const dispatch = useDispatch()
   const sortedBlogs = [...blogs].sort((a, b) => b.likes - a.likes)
+
+  const updateLikes = async (blogToUpdate) => {
+    dispatch(increaseLikes(blogToUpdate))
+  }
+
   return (
     <>
       <h4>
@@ -21,7 +22,7 @@ const Blogs = ({
           <Blog
             key={blog.id}
             blog={blog}
-            updateHandler={updateHandler}
+            updateHandler={updateLikes}
             username={username}
             deleteHandler={deleteHandler}
           />

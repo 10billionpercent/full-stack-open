@@ -1,7 +1,6 @@
 import { useDispatch } from 'react-redux'
 import { appendBlog } from '../reducers/blogReducer'
 import { setNotificationWithTimeout } from '../reducers/notificationReducer'
-import Blog from './Blog'
 
 const BlogForm = ({ user }) => {
   const dispatch = useDispatch()
