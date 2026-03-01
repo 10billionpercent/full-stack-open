@@ -27,6 +27,7 @@ const BlogForm = ({ user }) => {
         setNotificationWithTimeout(`Added ${title} by ${author}`, 'success'),
       )
     } catch (err) {
+      console.log(err)
       dispatch(setNotificationWithTimeout(err.response.data.error, 'error'))
     }
   }

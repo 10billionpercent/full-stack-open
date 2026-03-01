@@ -1,8 +1,8 @@
 import Blog from './Blog'
 import { useDispatch } from 'react-redux'
-import { increaseLikes } from '../reducers/blogReducer'
+import { increaseLikes, deleteBlog } from '../reducers/blogReducer'
 
-const Blogs = ({ username, name, logoutHandler, blogs, deleteHandler }) => {
+const Blogs = ({ user, logoutHandler, blogs }) => {
   const dispatch = useDispatch()
   const sortedBlogs = [...blogs].sort((a, b) => b.likes - a.likes)
 
@@ -10,10 +10,20 @@ const Blogs = ({ username, name, logoutHandler, blogs, deleteHandler }) => {
     dispatch(increaseLikes(blogToUpdate))
   }
 
+  const removeBlog = async (blogToDelete) => {
+    if (
+      window.confirm(
+        `Remove blog ${blogToDelete.title} by ${blogToDelete.author} ?`,
+      )
+    ) {
+      dispatch(deleteBlog(blogToDelete, user))
+    }
+  }
+
   return (
     <>
       <h4>
-        {name} logged in
+        {user.name} logged in
         <button onClick={() => logoutHandler()}> logout </button>
       </h4>
       <h2>Blogs</h2>
@@ -23,8 +33,8 @@ const Blogs = ({ username, name, logoutHandler, blogs, deleteHandler }) => {
             key={blog.id}
             blog={blog}
             updateHandler={updateLikes}
-            username={username}
-            deleteHandler={deleteHandler}
+            username={user.username}
+            deleteHandler={removeBlog}
           />
         ))}
       </ul>

@@ -74,18 +74,6 @@ const App = () => {
     setUser(null)
   }
 
-  const deleteBlog = async (blogToDelete) => {
-    const id = blogs.find((b) => b.id === blogToDelete.id).id
-    if (
-      window.confirm(
-        `Remove blog ${blogToDelete.title} by ${blogToDelete.author} ?`,
-      )
-    ) {
-      await blogService.deleteBlog(id, user.token)
-      setBlogs([...blogs].filter((blog) => blog.id !== id))
-    }
-  }
-
   const loginForm = () => (
     <Login
       loginHandler={loginHandler}
@@ -97,13 +85,7 @@ const App = () => {
   )
 
   const blogList = () => (
-    <Blogs
-      blogs={blogs}
-      username={user.username}
-      name={user.name}
-      logoutHandler={logoutHandler}
-      deleteHandler={deleteBlog}
-    />
+    <Blogs blogs={blogs} user={user} logoutHandler={logoutHandler} />
   )
 
   const blogForm = () => (
