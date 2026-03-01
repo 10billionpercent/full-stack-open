@@ -22,12 +22,11 @@ const BlogForm = ({ user }) => {
 
     const blogToAdd = { title: title, author: author, url: url, likes: likes }
     try {
-      dispatch(appendBlog(blogToAdd, user))
+      await dispatch(appendBlog(blogToAdd, user))
       dispatch(
         setNotificationWithTimeout(`Added ${title} by ${author}`, 'success'),
       )
     } catch (err) {
-      console.log(err)
       dispatch(setNotificationWithTimeout(err.response.data.error, 'error'))
     }
   }
