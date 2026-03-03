@@ -1,14 +1,14 @@
-import { useState } from "react";
+import { useState } from 'react'
 
 const Toggler = ({ buttonLabel, children }) => {
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState(false)
 
-  const hideWhenVisible = { display: visible ? "none" : "" };
-  const showWhenVisible = { display: visible ? "" : "none" };
+  const hideWhenVisible = { display: visible ? 'none' : '' }
+  const showWhenVisible = { display: visible ? '' : 'none' }
 
   const toggleVisiblity = () => {
-    setVisible(!visible);
-  };
+    setVisible(!visible)
+  }
 
   return (
     <div>
@@ -21,7 +21,7 @@ const Toggler = ({ buttonLabel, children }) => {
         <button onClick={toggleVisiblity}> cancel </button>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Toggler;
+export default Toggler

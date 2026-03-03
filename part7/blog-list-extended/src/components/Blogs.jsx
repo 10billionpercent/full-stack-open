@@ -2,7 +2,7 @@ import Blog from './Blog'
 import { useDispatch } from 'react-redux'
 import { increaseLikes, deleteBlog } from '../reducers/blogReducer'
 
-const Blogs = ({ user, logoutHandler, blogs }) => {
+const Blogs = ({ user, blogs }) => {
   const dispatch = useDispatch()
   const sortedBlogs = [...blogs].sort((a, b) => b.likes - a.likes)
 
@@ -22,10 +22,6 @@ const Blogs = ({ user, logoutHandler, blogs }) => {
 
   return (
     <>
-      <h4>
-        {user.name} logged in
-        <button onClick={() => logoutHandler()}> logout </button>
-      </h4>
       <h2>Blogs</h2>
       <ul>
         {sortedBlogs.map((blog) => (
