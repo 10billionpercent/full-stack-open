@@ -9,21 +9,15 @@ import loginService from './services/login'
 import blogService from './services/blogs'
 import { setBlogs } from './reducers/blogReducer'
 import { setNotificationWithTimeout } from './reducers/notificationReducer'
+import { setUser } from './reducers/userReducer'
 
 const App = () => {
-  /*const [blogs, setBlogs] = useState(() => {
-    const currentBlogs = window.localStorage.getItem('blogs')
-    return currentBlogs ? JSON.parse(currentBlogs) : []
-  })*/
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [user, setUser] = useState(() => {
-    const loggedInUser = window.localStorage.getItem('loggedInUser')
-    return loggedInUser ? JSON.parse(loggedInUser) : null
-  })
 
   const notification = useSelector((state) => state.notification)
   const blogs = useSelector((state) => state.blogs)
+  const user = useSelector((state) => state.user)
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -43,6 +37,13 @@ const App = () => {
     fetchBlogs()
   }, [dispatch, user])
 
+  useEffect(() => {
+    const loggedInUser = window.localStorage.getItem('loggedInUser')
+    if (loggedInUser) {
+      dispatch(setUser(JSON.parse(loggedInUser)))
+    }
+  }, [])
+
   const handleUsernameChange = (e) => {
     setUsername(e.target.value)
   }
@@ -57,10 +58,11 @@ const App = () => {
   const loginHandler = async (e) => {
     e.preventDefault()
     try {
-      const user = await loginService.login({ username, password })
-      window.localStorage.setItem('loggedInUser', JSON.stringify(user))
+      const loggedInUser = await loginService.login({ username, password })
+      window.localStorage.setItem('loggedInUser', JSON.stringify(loggedInUser))
 
-      setUser(user)
+      dispatch(setUser(loggedInUser))
+      console.log(user)
       setUsername('')
       setPassword('')
       updateMessage('login successful')
@@ -71,7 +73,7 @@ const App = () => {
 
   const logoutHandler = () => {
     window.localStorage.clear()
-    setUser(null)
+    dispatch(setUser(null))
   }
 
   const loginForm = () => (
