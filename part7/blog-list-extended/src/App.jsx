@@ -12,6 +12,7 @@ import { setBlogs } from './reducers/blogReducer'
 import { setNotificationWithTimeout } from './reducers/notificationReducer'
 import { setUser } from './reducers/userReducer'
 import Users from './components/Users'
+import User from './components/User'
 import { Routes, Route, useNavigate, useMatch } from 'react-router-dom'
 
 const App = () => {
@@ -48,9 +49,7 @@ const App = () => {
     }
     async function getUsers() {
       const users = await userService.getAllUsers()
-      setAllUsers(
-        users.map((u) => ({ name: u.name, blogs: u.blogs.length, id: u.id })),
-      )
+      setAllUsers(users)
     }
     getUsers()
   }, [])
@@ -104,6 +103,11 @@ const App = () => {
     </Toggler>
   )
 
+  const match = useMatch('/users/:id')
+  const matchedUser = match
+    ? allUsers.find((u) => u.id === match.params.id)
+    : null
+
   return (
     <div>
       <h1>Bloglist</h1>
@@ -127,6 +131,7 @@ const App = () => {
           }
         />
         <Route path="/users" element={<Users users={allUsers} />} />
+        <Route path="/users/:id" element={<User user={matchedUser} />} />
       </Routes>
     </div>
   )
