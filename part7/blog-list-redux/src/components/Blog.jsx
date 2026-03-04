@@ -28,6 +28,15 @@ const Blog = ({ blog, updateHandler, username, deleteHandler }) => {
         <b> likes </b> {blog.likes}
         <button onClick={() => updateHandler(blog)}> like </button>
       </p>
+      <p> added by {blog.user.name}</p>
+      <h3> comments</h3>
+      <ul>
+        {blog.comments.length !== 0 ? (
+          blog.comments.map((c, i) => <li key={i}> {c} </li>)
+        ) : (
+          <p> no comments yet</p>
+        )}
+      </ul>
       <button style={deleteButtonVisible} onClick={() => deleteHandler(blog)}>
         <b>remove </b>
       </button>

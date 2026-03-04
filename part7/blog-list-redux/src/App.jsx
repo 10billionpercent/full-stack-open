@@ -15,8 +15,7 @@ import { setNotificationWithTimeout } from './reducers/notificationReducer'
 import { setUser } from './reducers/userReducer'
 import Users from './components/Users'
 import User from './components/User'
-import { Routes, Route, useNavigate, useMatch } from 'react-router-dom'
-import login from './services/login'
+import { Routes, Route, useMatch } from 'react-router-dom'
 
 const App = () => {
   const [username, setUsername] = useState('')
@@ -55,7 +54,7 @@ const App = () => {
       setAllUsers(users)
     }
     getUsers()
-  }, [])
+  }, [dispatch])
 
   const handleUsernameChange = (e) => {
     setUsername(e.target.value)
