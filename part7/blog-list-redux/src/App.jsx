@@ -6,6 +6,7 @@ import AddBlog from './components/BlogForm'
 import Blogs from './components/Blogs'
 import Blog from './components/Blog'
 import Notification from './components/Notification'
+import Menu from './components/Menu'
 import loginService from './services/login'
 import blogService from './services/blogs'
 import userService from './services/users'
@@ -131,14 +132,9 @@ const App = () => {
 
   return (
     <div>
+      <Menu user={user} logoutHandler={logoutHandler} />
       <h1>Bloglist</h1>
       <Notification notification={notification} />
-      {user && (
-        <h4>
-          {user.name} logged in
-          <button onClick={() => logoutHandler()}> logout </button>
-        </h4>
-      )}
       <Routes>
         <Route
           path="/"

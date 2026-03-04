@@ -1,7 +1,4 @@
-import { useState } from 'react'
-
 const Blog = ({ blog, updateHandler, username, deleteHandler }) => {
-  const [visible, setVisible] = useState(false)
   if (!blog) {
     return null
   }
