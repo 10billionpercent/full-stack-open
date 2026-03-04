@@ -4,16 +4,18 @@ import Toggler from './components/Toggler'
 import Login from './components/Login'
 import AddBlog from './components/BlogForm'
 import Blogs from './components/Blogs'
+import Blog from './components/Blog'
 import Notification from './components/Notification'
 import loginService from './services/login'
 import blogService from './services/blogs'
 import userService from './services/users'
-import { setBlogs } from './reducers/blogReducer'
+import { setBlogs, increaseLikes, deleteBlog } from './reducers/blogReducer'
 import { setNotificationWithTimeout } from './reducers/notificationReducer'
 import { setUser } from './reducers/userReducer'
 import Users from './components/Users'
 import User from './components/User'
 import { Routes, Route, useNavigate, useMatch } from 'react-router-dom'
+import login from './services/login'
 
 const App = () => {
   const [username, setUsername] = useState('')
@@ -85,6 +87,20 @@ const App = () => {
     dispatch(setUser(null))
   }
 
+  const updateLikes = async (blogToUpdate) => {
+    dispatch(increaseLikes(blogToUpdate))
+  }
+
+  const removeBlog = async (blogToDelete) => {
+    if (
+      window.confirm(
+        `Remove blog ${blogToDelete.title} by ${blogToDelete.author} ?`,
+      )
+    ) {
+      dispatch(deleteBlog(blogToDelete, user))
+    }
+  }
+
   const loginForm = () => (
     <Login
       loginHandler={loginHandler}
@@ -95,7 +111,7 @@ const App = () => {
     />
   )
 
-  const blogList = () => <Blogs blogs={blogs} user={user} />
+  const blogList = () => <Blogs blogs={blogs} />
 
   const blogForm = () => (
     <Toggler buttonLabel="create new blog">
@@ -103,25 +119,32 @@ const App = () => {
     </Toggler>
   )
 
-  const match = useMatch('/users/:id')
-  const matchedUser = match
-    ? allUsers.find((u) => u.id === match.params.id)
+  const userMatch = useMatch('/users/:id')
+  const matchedUser = userMatch
+    ? allUsers.find((u) => u.id === userMatch.params.id)
+    : null
+
+  const blogMatch = useMatch('/blogs/:id')
+  const matchedBlog = blogMatch
+    ? blogs.find((b) => b.id === blogMatch.params.id)
     : null
 
   return (
     <div>
       <h1>Bloglist</h1>
       <Notification notification={notification} />
+      {user && (
+        <h4>
+          {user.name} logged in
+          <button onClick={() => logoutHandler()}> logout </button>
+        </h4>
+      )}
       <Routes>
         <Route
           path="/"
           element={
             user ? (
               <div>
-                <h4>
-                  {user.name} logged in
-                  <button onClick={() => logoutHandler()}> logout </button>
-                </h4>
                 {blogList()}
                 {blogForm()}
               </div>
@@ -131,7 +154,32 @@ const App = () => {
           }
         />
         <Route path="/users" element={<Users users={allUsers} />} />
-        <Route path="/users/:id" element={<User user={matchedUser} />} />
+        <Route
+          path="/users/:id"
+          element={
+            user ? (
+              <User user={matchedUser} />
+            ) : (
+              <div>
+                <h3> login to see user details</h3>
+                {loginForm()}
+              </div>
+            )
+          }
+        />
+        <Route
+          path="/blogs/:id"
+          element={
+            user ? (
+              <Blog
+                blog={matchedBlog}
+                updateHandler={updateLikes}
+                deleteHandler={removeBlog}
+                username={user.username}
+              />
+            ) : null
+          }
+        />
       </Routes>
     </div>
   )

@@ -2,6 +2,7 @@ const User = ({ user }) => {
   if (!user) {
     return null
   }
+  console.log(user)
   const blogs = user.blogs
   return (
     <div>
