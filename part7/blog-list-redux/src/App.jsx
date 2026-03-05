@@ -21,6 +21,7 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [allUsers, setAllUsers] = useState([])
+  const [comment, setComment] = useState('')
 
   const notification = useSelector((state) => state.notification)
   const blogs = useSelector((state) => state.blogs)
@@ -56,11 +57,25 @@ const App = () => {
     getUsers()
   }, [dispatch])
 
+  const userMatch = useMatch('/users/:id')
+  const matchedUser = userMatch
+    ? allUsers.find((u) => u.id === userMatch.params.id)
+    : null
+
+  const blogMatch = useMatch('/blogs/:id')
+  const matchedBlog = blogMatch
+    ? blogs.find((b) => b.id === blogMatch.params.id)
+    : null
+
   const handleUsernameChange = (e) => {
     setUsername(e.target.value)
   }
   const handlePasswordChange = (e) => {
     setPassword(e.target.value)
+  }
+
+  const handleCommentChange = (e) => {
+    setComment(e.target.value)
   }
 
   const updateMessage = (newMessage, newType = 'success') => {
@@ -119,16 +134,6 @@ const App = () => {
     </Toggler>
   )
 
-  const userMatch = useMatch('/users/:id')
-  const matchedUser = userMatch
-    ? allUsers.find((u) => u.id === userMatch.params.id)
-    : null
-
-  const blogMatch = useMatch('/blogs/:id')
-  const matchedBlog = blogMatch
-    ? blogs.find((b) => b.id === blogMatch.params.id)
-    : null
-
   return (
     <div>
       <Menu user={user} logoutHandler={logoutHandler} />
@@ -171,6 +176,8 @@ const App = () => {
                 updateHandler={updateLikes}
                 deleteHandler={removeBlog}
                 username={user.username}
+                comment={comment}
+                commentHandler={handleCommentChange}
               />
             ) : null
           }

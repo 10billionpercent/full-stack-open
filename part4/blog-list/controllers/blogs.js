@@ -121,8 +121,8 @@ blogsRouter.put(
 
 blogsRouter.post("/:id/comment", tokenExtractor, async (req, res, next) => {
   const id = req.params.id;
+  console.log(id);
   const comment = req.body.comment;
-  console.log(comment);
   const blogToBeCommented = await Blog.findById(id);
   blogToBeCommented.comments = [...blogToBeCommented.comments, comment];
   const commentedBlog = await blogToBeCommented.save();
