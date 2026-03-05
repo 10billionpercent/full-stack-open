@@ -69,7 +69,6 @@ export const addComment = (id, comment) => {
 }
 
 export const deleteBlog = (blogToDelete, user) => {
-  console.log(blogToDelete.id, user)
   return async (dispatch) => {
     await blogService.deleteBlog(blogToDelete.id, user.token)
     dispatch(

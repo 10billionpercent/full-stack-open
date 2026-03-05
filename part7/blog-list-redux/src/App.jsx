@@ -10,23 +10,23 @@ import Menu from './components/Menu'
 import loginService from './services/login'
 import blogService from './services/blogs'
 import userService from './services/users'
-import { setBlogs, increaseLikes, deleteBlog } from './reducers/blogReducer'
+import { setBlogs, deleteBlog } from './reducers/blogReducer'
 import { setNotificationWithTimeout } from './reducers/notificationReducer'
 import { setUser } from './reducers/userReducer'
 import Users from './components/Users'
 import User from './components/User'
-import { Routes, Route, useMatch } from 'react-router-dom'
+import { Routes, Route, useMatch, useNavigate } from 'react-router-dom'
 
 const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [allUsers, setAllUsers] = useState([])
-  const [comment, setComment] = useState('')
 
   const notification = useSelector((state) => state.notification)
   const blogs = useSelector((state) => state.blogs)
   const user = useSelector((state) => state.user)
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (user) {
@@ -57,6 +57,21 @@ const App = () => {
     getUsers()
   }, [dispatch])
 
+  const removeBlog = async (blogToDelete) => {
+    if (
+      window.confirm(
+        `Remove blog ${blogToDelete.title} by ${blogToDelete.author} ?`,
+      )
+    ) {
+      try {
+        dispatch(deleteBlog(blogToDelete, user))
+        navigate('/', { replace: true })
+        updateMessage(`${blogToDelete.title} by ${blogToDelete.author} deleted`)
+      } catch (err) {
+        updateMessage(err.message)
+      }
+    }
+  }
   const userMatch = useMatch('/users/:id')
   const matchedUser = userMatch
     ? allUsers.find((u) => u.id === userMatch.params.id)
@@ -72,10 +87,6 @@ const App = () => {
   }
   const handlePasswordChange = (e) => {
     setPassword(e.target.value)
-  }
-
-  const handleCommentChange = (e) => {
-    setComment(e.target.value)
   }
 
   const updateMessage = (newMessage, newType = 'success') => {
@@ -100,20 +111,6 @@ const App = () => {
   const logoutHandler = () => {
     window.localStorage.clear()
     dispatch(setUser(null))
-  }
-
-  const updateLikes = async (blogToUpdate) => {
-    dispatch(increaseLikes(blogToUpdate))
-  }
-
-  const removeBlog = async (blogToDelete) => {
-    if (
-      window.confirm(
-        `Remove blog ${blogToDelete.title} by ${blogToDelete.author} ?`,
-      )
-    ) {
-      dispatch(deleteBlog(blogToDelete, user))
-    }
   }
 
   const loginForm = () => (
@@ -173,13 +170,15 @@ const App = () => {
             user ? (
               <Blog
                 blog={matchedBlog}
-                updateHandler={updateLikes}
-                deleteHandler={removeBlog}
                 username={user.username}
-                comment={comment}
-                commentHandler={handleCommentChange}
+                deleteHandler={removeBlog}
               />
-            ) : null
+            ) : (
+              <div>
+                <h3> login to see blog details</h3>
+                {loginForm()}
+              </div>
+            )
           }
         />
       </Routes>

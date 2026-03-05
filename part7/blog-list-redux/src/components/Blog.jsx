@@ -1,15 +1,17 @@
-import { addComment } from '../reducers/blogReducer'
+import { useState } from 'react'
+import { increaseLikes, addComment } from '../reducers/blogReducer'
 import { useDispatch } from 'react-redux'
 
-const Blog = ({
-  blog,
-  updateHandler,
-  username,
-  deleteHandler,
-  comment,
-  commentHandler,
-}) => {
+const Blog = ({ blog, username, deleteHandler }) => {
+  const [comment, setComment] = useState('')
+
+  const handleCommentChange = (e) => {
+    setComment(e.target.value)
+  }
   const dispatch = useDispatch()
+  const updateLikes = async (blogToUpdate) => {
+    dispatch(increaseLikes(blogToUpdate))
+  }
   const postComment = async (e) => {
     e.preventDefault()
     try {
@@ -43,7 +45,7 @@ const Blog = ({
       <a href={blog.url}>{blog.url}</a>
       <p>
         <b> likes </b> {blog.likes}
-        <button onClick={() => updateHandler(blog)}> like </button>
+        <button onClick={() => updateLikes(blog)}> like </button>
       </p>
       <p> added by {blog.user.name}</p>
       <h3> comments</h3>
@@ -57,8 +59,12 @@ const Blog = ({
       <div>
         <form onSubmit={postComment}>
           <label>
-            add comment
-            <input name="comment" value={comment} onChange={commentHandler} />
+            <input
+              name="comment"
+              value={comment}
+              placeholder="add comment"
+              onChange={handleCommentChange}
+            />
           </label>
           <button type="submit">add comment</button>
         </form>
