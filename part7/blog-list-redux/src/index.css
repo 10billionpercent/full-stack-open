@@ -4,6 +4,7 @@
   --color-body: #02111a;
   --color-input: #041f31;
   --color-error: #e52929ff;
+  --color-success: #12e607;
 }
 
 @layer base {

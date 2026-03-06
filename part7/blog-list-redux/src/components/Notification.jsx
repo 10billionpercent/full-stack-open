@@ -1,16 +1,6 @@
-const success = {
-  color: '#12e607',
-  padding: '10px',
-  border: '1px solid #12e607',
-  borderRadius: '10px',
-}
+const success = 'text-lg text-success p-2 border-2 border-success rounded-lg'
 
-const error = {
-  color: '#e52929ff',
-  padding: '10px',
-  border: '1px solid #e52929ff',
-  borderRadius: '10px',
-}
+const error = 'text-lg text-error p-2 border-2 border-error rounded-lg'
 
 const Notification = ({ notification }) => {
   if (!notification) {
@@ -18,7 +8,7 @@ const Notification = ({ notification }) => {
   }
   const { message, type } = notification
   return (
-    <div id="notification" style={type === 'success' ? success : error}>
+    <div id="notification" className={type === 'success' ? success : error}>
       {message}
     </div>
   )

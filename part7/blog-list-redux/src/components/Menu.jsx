@@ -1,19 +1,16 @@
 import { Link } from 'react-router-dom'
 
 const Menu = ({ user, logoutHandler }) => {
-  const padding = {
-    paddingRight: 5,
-  }
   return (
     <div className="bg-navbar flex items-center justify-between border-b border-blue-300 p-4">
       <span className="text-4xl font-bold m-0 leading-tight inline-block text-transparent bg-clip-text bg-linear-to-r from-cyan-300 to-blue-400">
         Bloglist
       </span>
       <div className="flex items-center gap-10">
-        <Link style={padding} to="/" className="text-xl">
+        <Link to="/" className="text-xl">
           blogs
         </Link>
-        <Link style={padding} to="/users" className="text-xl">
+        <Link to="/users" className="text-xl">
           users
         </Link>
         {user && (
