@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import Toggler from './components/Toggler'
 import Login from './components/Login'
-import AddBlog from './components/BlogForm'
+import BlogForm from './components/BlogForm'
 import Blogs from './components/Blogs'
 import Blog from './components/Blog'
 import Notification from './components/Notification'
@@ -127,21 +127,20 @@ const App = () => {
 
   const blogForm = () => (
     <Toggler buttonLabel="create new blog">
-      <AddBlog user={user} />
+      <BlogForm user={user} />
     </Toggler>
   )
 
   return (
-    <div>
+    <div className="flex flex-col gap-4">
       <Menu user={user} logoutHandler={logoutHandler} />
-      <h1>Bloglist</h1>
       <Notification notification={notification} />
       <Routes>
         <Route
           path="/"
           element={
             user ? (
-              <div>
+              <div className="flex flex-row gap-8 px-4">
                 {blogList()}
                 {blogForm()}
               </div>

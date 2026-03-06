@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { BsBookmarkPlus } from 'react-icons/bs'
 
 const Toggler = ({ buttonLabel, children }) => {
   const [visible, setVisible] = useState(false)
@@ -13,12 +14,22 @@ const Toggler = ({ buttonLabel, children }) => {
   return (
     <div>
       <div style={hideWhenVisible}>
-        <button onClick={toggleVisiblity}> {buttonLabel} </button>
+        <button
+          onClick={toggleVisiblity}
+          className="flex flex-row gap-2 items-center"
+        >
+          <BsBookmarkPlus /> {buttonLabel}
+        </button>
       </div>
 
-      <div style={showWhenVisible}>
+      <div style={showWhenVisible} className="flex flex-col gap-4">
         {children}
-        <button onClick={toggleVisiblity}> cancel </button>
+        <button
+          onClick={toggleVisiblity}
+          className="text-error border-2 border-error"
+        >
+          cancel
+        </button>
       </div>
     </div>
   )

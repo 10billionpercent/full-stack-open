@@ -32,34 +32,40 @@ const BlogForm = ({ user }) => {
   }
 
   return (
-    <form onSubmit={addBlog}>
-      <h2> add new blog </h2>
-      <div>
-        <label>
+    <form onSubmit={addBlog} className="flex flex-col gap-2">
+      <h2 className="font-bold text-2xl text-blue-300"> add new blog </h2>
+      <div className="flex flex-row gap-4">
+        <label className="text-lg w-16" htmlFor="title">
           title
-          <input name="title" />
         </label>
+        <input name="title" className="bg-input rounded-md" id="title" />
       </div>
-      <div>
-        <label>
+      <div className="flex flex-row gap-4">
+        <label className="text-lg w-16" htmlFor="author">
           author
-          <input name="author" />
         </label>
+        <input
+          name="author"
+          className="bg-input rounded-md flex-1"
+          id="author"
+        />
       </div>
-      <div>
-        <label>
+      <div className="flex flex-row gap-4">
+        <label className="text-lg w-16" htmlFor="url">
           url
-          <input name="url" />
         </label>
+        <input name="url" className="bg-input rounded-md" id="url" />
       </div>
-      <div>
-        <label>
+      <div className="flex flex-row gap-4">
+        <label className="text-lg w-16" htmlFor="likes">
           likes
-          <input name="likes" />
         </label>
+        <input name="likes" className="bg-input rounded-md" id="likes" />
       </div>
       <div>
-        <button type="submit">add</button>
+        <button type="submit" className="w-full">
+          add
+        </button>
       </div>
     </form>
   )
