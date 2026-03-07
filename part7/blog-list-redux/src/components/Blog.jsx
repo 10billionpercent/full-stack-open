@@ -1,6 +1,12 @@
 import { useState } from 'react'
 import { increaseLikes, addComment } from '../reducers/blogReducer'
 import { useDispatch } from 'react-redux'
+import {
+  BsBookmarkFill,
+  BsHandThumbsUp,
+  BsTrash3,
+  BsChatHeartFill,
+} from 'react-icons/bs'
 
 const Blog = ({ blog, username, deleteHandler }) => {
   const [comment, setComment] = useState('')
@@ -33,22 +39,34 @@ const Blog = ({ blog, username, deleteHandler }) => {
   }
 
   return (
-    <div className="blog">
-      <div>
-        <h2>
+    <div className="flex  flex-col gap-4 px-4">
+      <div className="flex gap-4 items-center">
+        <BsBookmarkFill className="text-3xl text-blue-300" />
+        <h3 className="font-bold text-3xl text-blue-300">
           {blog.title} by
           <b>
             <i> {blog.author}</i>
           </b>
-        </h2>
+        </h3>
       </div>
-      <a href={blog.url}>{blog.url}</a>
+      <a href={blog.url} className="font-bold text-lg">
+        {blog.url}
+      </a>
       <p>
         <b> likes </b> {blog.likes}
-        <button onClick={() => updateLikes(blog)}> like </button>
+        <button
+          onClick={() => updateLikes(blog)}
+          className="flex flex-row gap-2 items-center"
+        >
+          <BsHandThumbsUp />
+          like
+        </button>
       </p>
       <p> added by {blog.user.name}</p>
-      <h3> comments</h3>
+      <div className="flex gap-4 items-center">
+        <BsChatHeartFill className="font-bold text-2xl" />
+        <h3 className="font-bold text-2xl"> comments</h3>
+      </div>
       <ul>
         {blog.comments.length !== 0 ? (
           blog.comments.map((c, i) => <li key={i}> {c} </li>)
@@ -69,7 +87,12 @@ const Blog = ({ blog, username, deleteHandler }) => {
           <button type="submit">add comment</button>
         </form>
       </div>
-      <button style={deleteButtonVisible} onClick={() => deleteHandler(blog)}>
+      <button
+        style={deleteButtonVisible}
+        onClick={() => deleteHandler(blog)}
+        className="flex flex-row gap-2 items-center"
+      >
+        <BsTrash3 className="font-bold" />
         <b>remove </b>
       </button>
     </div>

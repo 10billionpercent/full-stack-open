@@ -64,11 +64,11 @@ const App = () => {
       )
     ) {
       try {
-        dispatch(deleteBlog(blogToDelete, user))
+        await dispatch(deleteBlog(blogToDelete, user))
         navigate('/', { replace: true })
         updateMessage(`${blogToDelete.title} by ${blogToDelete.author} deleted`)
-      } catch (err) {
-        updateMessage(err.message)
+      } catch {
+        updateMessage('token expired, log in again', 'error')
       }
     }
   }
