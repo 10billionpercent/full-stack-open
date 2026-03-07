@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { BsXSquare } from 'react-icons/bs'
 
 const Menu = ({ user, logoutHandler }) => {
   return (
@@ -16,13 +17,14 @@ const Menu = ({ user, logoutHandler }) => {
         {user && (
           <div className="flex items-center gap-4">
             <span className="m-0 text-lg">
-              <span className="text-blue-300 font-bold">{user.name}</span>{' '}
-              logged in
+              <span className="text-blue-300 font-bold">{user.name}</span>
+              &thinsp; logged in
             </span>
             <button
-              className="text-lg p-2 text-error border-2 border-error"
+              className="text-lg p-2 text-error border-2 border-error flex flex-row gap-2 items-center"
               onClick={() => logoutHandler()}
             >
+              <BsXSquare />
               logout
             </button>
           </div>

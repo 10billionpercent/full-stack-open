@@ -14,8 +14,9 @@
   button {
     @apply text-lg p-2;
   }
-  input {
-    @apply px-2 bg-input rounded-md;
+  input,
+  textarea {
+    @apply px-2 py-1 bg-input rounded-md;
   }
   label {
     @apply text-lg w-16;

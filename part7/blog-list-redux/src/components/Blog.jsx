@@ -6,6 +6,8 @@ import {
   BsHandThumbsUp,
   BsTrash3,
   BsChatHeartFill,
+  BsSend,
+  BsPersonHeart,
 } from 'react-icons/bs'
 
 const Blog = ({ blog, username, deleteHandler }) => {
@@ -22,7 +24,7 @@ const Blog = ({ blog, username, deleteHandler }) => {
     e.preventDefault()
     try {
       dispatch(addComment(blog.id, comment))
-      e.target.comment.value = ''
+      setComment('')
     } catch (err) {
       console.log(err)
     }
@@ -37,6 +39,7 @@ const Blog = ({ blog, username, deleteHandler }) => {
     color: '#ff2c2c',
     border: '2px solid #ff2c2c',
   }
+  const comments = blog.comments.filter((c) => c !== null)
 
   return (
     <div className="flex  flex-col gap-4 px-4">
@@ -49,11 +52,14 @@ const Blog = ({ blog, username, deleteHandler }) => {
           </b>
         </h3>
       </div>
-      <a href={blog.url} className="font-bold text-lg">
-        {blog.url}
-      </a>
-      <p>
-        <b> likes </b> {blog.likes}
+      <p className="text-lg font-bold">
+        check it out at &ensp;
+        <a href={blog.url} className="font-bold text-lg">
+          {blog.url}
+        </a>
+      </p>
+      <div className="flex gap-4 items-center">
+        <p className="text-lg font-bold">{blog.likes} likes</p>
         <button
           onClick={() => updateLikes(blog)}
           className="flex flex-row gap-2 items-center"
@@ -61,30 +67,46 @@ const Blog = ({ blog, username, deleteHandler }) => {
           <BsHandThumbsUp />
           like
         </button>
-      </p>
-      <p> added by {blog.user.name}</p>
+      </div>
+
+      <span>
+        added by
+        <p className="text-lg font-bold text-blue-300">{blog.user.name} </p>
+      </span>
       <div className="flex gap-4 items-center">
         <BsChatHeartFill className="font-bold text-2xl" />
         <h3 className="font-bold text-2xl"> comments</h3>
       </div>
       <ul>
-        {blog.comments.length !== 0 ? (
-          blog.comments.map((c, i) => <li key={i}> {c} </li>)
+        {comments.length !== 0 ? (
+          comments.map((c, i) => (
+            <li key={i} className="flex gap-4 items-center">
+              <BsPersonHeart /> {c}
+            </li>
+          ))
         ) : (
-          <p> no comments yet</p>
+          <p className="text-lg font-bold text-blue-300"> no comments yet</p>
         )}
       </ul>
       <div>
-        <form onSubmit={postComment}>
-          <label>
-            <input
-              name="comment"
-              value={comment}
-              placeholder="add comment"
-              onChange={handleCommentChange}
-            />
-          </label>
-          <button type="submit">add comment</button>
+        <form onSubmit={postComment} className="flex flex-col gap-2">
+          <textarea
+            name="comment"
+            value={comment}
+            onChange={handleCommentChange}
+            rows={1}
+            className="resize-none w-100"
+            onInput={(e) => {
+              e.target.style.height = 'auto'
+              e.target.style.height = e.target.scrollHeight + 'px'
+            }}
+          />
+          <button
+            type="submit"
+            className="flex flex-row gap-2 items-center w-fit"
+          >
+            <BsSend /> add comment
+          </button>
         </form>
       </div>
       <button
